@@ -4,7 +4,9 @@
 
 2) Instalar Yarn (https://classic.yarnpkg.com/pt-BR/docs/install/#windows-stable)
 
-Executar yarn start na pasta raiz do projeto.
+Executar na pasta raiz do projeto:
+1) yarn (baixar dependencias)
+2) yarn start (executar codigo)
 
 
 ### Ambiente de desenvolvimento recomentado
