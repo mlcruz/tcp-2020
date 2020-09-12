@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Synth, MembraneSynth, now as ToneNow } from "tone";
+import { parseNotesFromText } from "../utils/parseTextInput";
 
 // Props são os "parametros" do nosso componente (ver App.tsx)
 type Props = { input: string };
@@ -30,9 +31,14 @@ export default class SoundGeneratorButton extends React.Component<
     const now = ToneNow();
 
     // Tocando 2 notas por segundo:
-    const data = this.props.input.match(/.{1,2}/g);
+    const notes = parseNotesFromText(this.props.input);
 
-    this.synth.triggerAttack(this.props.input);
+    for (let index = 0; index < notes.length; index++) {
+      const note = notes[index];
+
+      // agendamos a nota para ser tocada daqui a index * 0.5 segundos
+      this.synth.triggerAttackRelease(note, 0.5, now + 0.5 * index);
+    }
   }
 
   // Metodo render do componente define o que vai ser desenhado na tela
