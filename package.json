@@ -21,7 +21,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && aws s3 sync ./build s3://site-tcp-2020 --delete --acl public-read"
+    "deploy": "yarn build && aws s3 sync ./build s3://site-tcp-2020 --delete --acl public-read --exclude samples/**.*"
   },
   "eslintConfig": {
     "extends": "react-app"
