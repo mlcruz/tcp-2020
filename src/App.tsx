@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SoundGeneratorButton from "./components/SoundGeneratorButton";
 import { parseNotesFromText } from "./utils/parseTextInput";
+import { SampleLibrary } from "./external-packages/tone-instruments/Tonejs-Instruments";
 
 // Componente principal da aplicação.
 // Utilizamos aqui um componente funcional em vez de um orientado a objetos
@@ -33,7 +34,6 @@ function App() {
                 O caractere representa (+sustenido) a 'Nota' e o numero a
                 oitava. Ex: A8, B6, C#2
               </p>
-
               <p>Notas tocam a cada 0.5 segundo.</p>
             </div>
           </div>
@@ -49,7 +49,10 @@ function App() {
               />
             </div>
             <div className={"colm-6"}>
-              <SoundGeneratorButton input={textInput}></SoundGeneratorButton>
+              <SoundGeneratorButton
+                input={textInput}
+                initialInstrument={"piano"}
+              ></SoundGeneratorButton>
             </div>
           </div>
         </div>
