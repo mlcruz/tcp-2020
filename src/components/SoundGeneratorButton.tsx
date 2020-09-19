@@ -148,18 +148,3 @@ export default class SoundGeneratorButton extends React.Component<
     );
   }
 }
-
-{
-  /* <div className="form-check">
-<input
-  className="form-check-input"
-  type="radio"
-  name="instrumentRadios"
-  id="piano-radio"
-  value="piano"
-/>
-<label className="form-check-label" htmlFor="piano-radio">
-  Piano
-</label>
-</div> */
-}
