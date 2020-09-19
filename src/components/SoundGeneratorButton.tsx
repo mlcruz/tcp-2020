@@ -17,7 +17,7 @@ type Props = { input: string; initialInstrument: ToneJsInstrument };
 type State = {
   library: SamplerLibrary | null;
   loaded: boolean;
-  currentInstrument: null | Sampler;
+  currentInstrument: null | { name: ToneJsInstrument; instrument: Sampler };
 };
 
 export default class SoundGeneratorButton extends React.Component<
@@ -32,8 +32,10 @@ export default class SoundGeneratorButton extends React.Component<
       currentInstrument: null,
     }; // Ainda não carregado
 
-    // Ignorar isso -> Necessario para compatibilidade com react oop
-    this.handleClick = this.handleClick.bind(this);
+    // Aqui damos um bind na definição do metodo com o objeto construido
+    // Pode ignorar isso, é só mais uma bizarrice de js orientado a objetos
+    this.handlePlayClick = this.handlePlayClick.bind(this);
+    this.swapInstrument = this.swapInstrument.bind(this);
   }
 
   componentDidMount() {
@@ -56,14 +58,17 @@ export default class SoundGeneratorButton extends React.Component<
 
       this.setState({
         library: library,
-        currentInstrument: library[this.props.initialInstrument],
+        currentInstrument: {
+          name: this.props.initialInstrument,
+          instrument: library[this.props.initialInstrument],
+        },
         loaded: false,
       });
     }
   }
 
   // handleClick é chamado pelo botão ao ser clicado
-  private handleClick() {
+  private handlePlayClick() {
     const now = ToneNow();
 
     // Tocando 2 notas por segundo:
@@ -71,18 +76,55 @@ export default class SoundGeneratorButton extends React.Component<
 
     for (let index = 0; index < notes.length; index++) {
       const note = notes[index];
+      const selectedInstrument = this.state.currentInstrument!;
+
+      // Instrumento selectionado vai para saida principal
+      selectedInstrument.instrument.toMaster();
 
       // agendamos a nota para ser tocada daqui a index * 0.5 segundos
-      // this.synth.triggerAttackRelease(note, 0.5, now + 0.5 * index);
+      selectedInstrument.instrument.triggerAttackRelease(
+        note,
+        0.5,
+        now + 0.5 * index
+      );
     }
+  }
+
+  // handleClick é chamado pelo botão ao ser clicado
+  private swapInstrument(instrument: ToneJsInstrument) {
+    this.setState({
+      currentInstrument: {
+        name: instrument,
+        instrument: this.state.library![instrument],
+      },
+    });
   }
 
   // Metodo render do componente define o que vai ser desenhado na tela
   public render() {
     return this.state.loaded ? (
       <div>
-        <button className={"btn btn-primary"} onClick={this.handleClick}>
+        <div className="alert alert-warning">{`instrumento ${this.state.currentInstrument?.name}`}</div>
+        <button className={"btn btn-primary"} onClick={this.handlePlayClick}>
           Gerar
+        </button>
+        <br />
+        <button
+          className={"btn btn-secondary"}
+          onClick={() => {
+            this.swapInstrument("guitar-acoustic");
+          }}
+        >
+          Trocar para guitarra
+        </button>
+
+        <button
+          className={"btn btn-secondary"}
+          onClick={() => {
+            this.swapInstrument("piano");
+          }}
+        >
+          Trocar para piano
         </button>
       </div>
     ) : (
