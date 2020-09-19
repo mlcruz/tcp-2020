@@ -11,7 +11,11 @@ import {
 } from "../utils/SampleLibraryWrapper";
 
 // Props são os "parametros" do nosso componente (ver App.tsx)
-type Props = { input: string; initialInstrument: ToneJsInstrument };
+type Props = {
+  input: string;
+  initialInstrument: ToneJsInstrument;
+  instrumentsToLoad: ToneJsInstrument[];
+};
 
 // Estado é o estado mutavel de nosso componente (https://pt-br.reactjs.org/docs/state-and-lifecycle.html). Não utilizado por enquanto
 type State = {
@@ -42,7 +46,7 @@ export default class SoundGeneratorButton extends React.Component<
     if (this.state.library === null) {
       const library = loadSampleLibrary({
         baseUrl: "https://site-tcp-2020.s3-sa-east-1.amazonaws.com/samples/",
-        instruments: ["piano", "guitar-acoustic"],
+        instruments: this.props.instrumentsToLoad,
         onload: (instrumentName) => {
           if (instrumentName === this.props.initialInstrument) {
             console.log(
@@ -104,31 +108,58 @@ export default class SoundGeneratorButton extends React.Component<
   public render() {
     return this.state.loaded ? (
       <div>
-        <div className="alert alert-warning">{`instrumento ${this.state.currentInstrument?.name}`}</div>
-        <button className={"btn btn-primary"} onClick={this.handlePlayClick}>
-          Gerar
-        </button>
         <br />
-        <button
-          className={"btn btn-secondary"}
-          onClick={() => {
-            this.swapInstrument("guitar-acoustic");
-          }}
-        >
-          Trocar para guitarra
-        </button>
+        <div>
+          {this.props.instrumentsToLoad.map((instrumentName) => (
+            <div className="form-check" key={`${instrumentName}-input-div`}>
+              <input
+                className="form-check-input"
+                type="radio"
+                name="instrumentRadios"
+                id={`${instrumentName}-input-radio`}
+                value={`${instrumentName}`}
+                onChange={(e) =>
+                  this.swapInstrument(e.target.value as ToneJsInstrument)
+                }
+                key={`${instrumentName}-input-radio`}
+                checked={this.state.currentInstrument?.name === instrumentName}
+              />
+              <label
+                key={`${instrumentName}-input-label`}
+                className="form-check-label"
+                htmlFor={`${instrumentName}-input-radio`}
+              >
+                {instrumentName}
+              </label>
+            </div>
+          ))}
+        </div>
 
         <button
-          className={"btn btn-secondary"}
-          onClick={() => {
-            this.swapInstrument("piano");
-          }}
+          className={"btn btn-primary"}
+          onClick={this.handlePlayClick}
+          style={{ marginTop: 15 }}
         >
-          Trocar para piano
+          Gerar
         </button>
       </div>
     ) : (
       <div className="alert alert-info">Carregando...</div>
     );
   }
+}
+
+{
+  /* <div className="form-check">
+<input
+  className="form-check-input"
+  type="radio"
+  name="instrumentRadios"
+  id="piano-radio"
+  value="piano"
+/>
+<label className="form-check-label" htmlFor="piano-radio">
+  Piano
+</label>
+</div> */
 }
