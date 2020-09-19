@@ -22,6 +22,8 @@ type State = {
   library: SamplerLibrary | null;
   loaded: boolean;
   currentInstrument: null | { name: ToneJsInstrument; instrument: Sampler };
+  bpm: number;
+  bpmField: string;
 };
 
 export default class SoundGeneratorButton extends React.Component<
@@ -34,6 +36,8 @@ export default class SoundGeneratorButton extends React.Component<
       loaded: false,
       library: null,
       currentInstrument: null,
+      bpm: 120,
+      bpmField: "120",
     }; // Ainda não carregado
 
     // Aqui damos um bind na definição do metodo com o objeto construido
@@ -85,11 +89,12 @@ export default class SoundGeneratorButton extends React.Component<
       // Instrumento selectionado vai para saida principal
       selectedInstrument.instrument.toMaster();
 
+      const beatsPeriod = 60 / this.state.bpm;
       // agendamos a nota para ser tocada daqui a index * 0.5 segundos
       selectedInstrument.instrument.triggerAttackRelease(
         note,
-        0.5,
-        now + 0.5 * index
+        beatsPeriod,
+        now + beatsPeriod * index
       );
     }
   }
@@ -109,7 +114,23 @@ export default class SoundGeneratorButton extends React.Component<
     return this.state.loaded ? (
       <div>
         <br />
+        <div style={{ display: "inline-block" }}>
+          <input
+            type="text"
+            value={this.state.bpmField}
+            onChange={(e) => {
+              this.setState({ bpmField: e.target.value });
+            }}
+          />{" "}
+          <button
+            className={"btn btn-secondary"}
+            onClick={() => this.setState({ bpm: +this.state.bpmField })}
+          >
+            Alterar Bpm
+          </button>
+        </div>
         <div>
+          <br />
           {this.props.instrumentsToLoad.map((instrumentName) => (
             <div className="form-check" key={`${instrumentName}-input-div`}>
               <input
