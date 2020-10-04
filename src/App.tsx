@@ -14,7 +14,7 @@ function App() {
   // esse campo.
   // O texto docampo então é passado como parametro para o componente gerador de som
 
-  const [textInput, setTextInput] = useState("A1A2A3A4B4B3");
+  const [textInput, setTextInput] = useState("ABCD");
 
   return (
     <div className="App">
@@ -56,7 +56,6 @@ function App() {
                   "bass-electric",
                   "harp",
                   "xylophone",
-                  "clarinet",
                 ]}
               ></SoundGeneratorButton>
             </div>
