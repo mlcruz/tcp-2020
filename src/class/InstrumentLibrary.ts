@@ -5,6 +5,8 @@ import {
 import { Note } from "./Note";
 import { Instrument } from "./Instrument";
 import { timer } from "../utils/timer";
+import { Param } from "tone";
+import { throws } from "assert";
 
 type InstrumentDict = { [key in ToneJsInstrument]?: Instrument };
 
@@ -17,8 +19,11 @@ export class InstrumentLibrary {
   private currentInstrument: ToneJsInstrument;
   private instrumentDict: InstrumentDict;
 
-  constructor(loadedSampleLibrary: SamplerLibrary) {
-    this.volume = 2;
+  constructor(
+    loadedSampleLibrary: SamplerLibrary,
+    setState: (instrumentLibrary: InstrumentLibrary | null) => void
+  ) {
+    this.volume = -20;
     this.octave = 3;
     this.bpm = 60;
     this.currentInstrument = "guitar-acoustic";
@@ -41,6 +46,48 @@ export class InstrumentLibrary {
     await timer((60 / this.bpm) * 1000);
   }
 
+  private doubleVolume() {
+    if (this.volume > 0) {
+      this.volume = Math.ceil(this.volume * 2);
+    } else if (this.volume < 0) {
+      this.volume = Math.floor(this.volume / 2);
+    } else {
+      this.volume = 1;
+    }
+  }
+
+  private halfVolume() {
+    if (this.volume > 0) {
+      this.volume = Math.ceil(this.volume / 2);
+    } else if (this.volume < 0) {
+      this.volume = Math.floor(this.volume * 2);
+    } else {
+      this.volume = -1;
+    }
+  }
+
+  private swapInstrument() {
+    const loadedInstruments = Object.keys(this.instrumentDict).filter(
+      (i) => this.instrumentDict[i as ToneJsInstrument] !== undefined
+    );
+
+    const currInstrumentIndex = loadedInstruments.indexOf(
+      this.currentInstrument
+    );
+
+    // Proximo instrumento do indice, com modulo para envitar overflow
+    this.currentInstrument = loadedInstruments[
+      (currInstrumentIndex + 1) % loadedInstruments.length
+    ] as ToneJsInstrument;
+  }
+
+  public async resetState() {
+    this.volume = -20;
+    this.octave = 3;
+    this.bpm = 60;
+    this.currentInstrument = "guitar-acoustic";
+  }
+
   public async playInput(char: string) {
     // É uma nota
     if (char[0].match(/[ABCDEFG]/)) {
@@ -51,7 +98,7 @@ export class InstrumentLibrary {
         period: 60 / this.bpm,
       };
 
-      this.instrumentDict[this.currentInstrument]?.playNote(note);
+      this.instrumentDict[this.currentInstrument]?.playNote(note, this.volume);
       await this.waitPeriod();
       return;
     }
@@ -59,10 +106,28 @@ export class InstrumentLibrary {
     switch (char[0]) {
       case " ":
         await this.waitPeriod();
+        break;
       case "+":
-        this.volume = this.volume * 2;
+        this.doubleVolume();
+        break;
       case "-":
-        this.volume = this.volume / 2;
+        this.halfVolume();
+        break;
+      case "I":
+        this.swapInstrument();
+        break;
+      case "U":
+        this.octave = this.octave + 1;
+        break;
+      case "J":
+        this.octave = this.octave - 1;
+        break;
+      case "N":
+        this.bpm = this.bpm + 50;
+        break;
+      case "M":
+        this.bpm = this.bpm - 50;
+        break;
     }
   }
 }

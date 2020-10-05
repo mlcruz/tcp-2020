@@ -1,4 +1,4 @@
-import { Sampler } from "tone";
+import { Sampler, Param } from "tone";
 import { Note } from "./Note";
 
 export class Instrument {
@@ -10,8 +10,10 @@ export class Instrument {
     this.sampler = sampler;
   }
 
-  public playNote(note: Note) {
+  public playNote(note: Note, volume: number) {
     this.sampler.toMaster();
+    this.sampler.set({ volume: volume });
+
     this.sampler.triggerAttackRelease(
       note.note + note.octave.toString(),
       note.period

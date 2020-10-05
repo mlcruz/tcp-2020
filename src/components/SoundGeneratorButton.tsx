@@ -63,7 +63,9 @@ export default class SoundGeneratorButton extends React.Component<
 
       this.setState({
         loaded: false,
-        instrumentLibrary: new InstrumentLibrary(library),
+        instrumentLibrary: new InstrumentLibrary(library, (state) => {
+          this.setState({ instrumentLibrary: state });
+        }),
       });
     }
   }
@@ -71,13 +73,14 @@ export default class SoundGeneratorButton extends React.Component<
   // handleClick é chamado pelo botão ao ser clicado
   private async handlePlayClick() {
     const now = ToneNow(); // Pega tempo atual em unix epoch (milis)
-
+    this.state.instrumentLibrary?.resetState();
     const input = this.props.input;
 
     for (let index = 0; index < input.length; index++) {
       const char = input[index];
 
       await this.state.instrumentLibrary?.playInput(char);
+      console.log(this.state.instrumentLibrary);
     }
   }
 
