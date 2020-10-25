@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SoundGeneratorButton from "./components/SoundGeneratorButton";
-import { SampleLibrary } from "./external-packages/tone-instruments/Tonejs-Instruments";
 import { MidiInstrument } from "./class/MidiInstrument";
+import WebMidi from "webmidi";
 
 // Componente principal da aplicação.
 // Utilizamos aqui um componente funcional em vez de um orientado a objetos

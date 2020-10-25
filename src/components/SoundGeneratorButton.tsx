@@ -1,4 +1,5 @@
 import React from "react";
+import * as base64 from "byte-base64";
 
 // Importamos bibliotecas definidas em from ...
 import { MidiPlayer } from "../class/MidiPlayer";
@@ -15,6 +16,7 @@ type Props = {
 type State = {
   instrumentLibrary: MidiPlayer;
   midiState: Midi;
+  playingSound: boolean;
 };
 
 export default class SoundGeneratorButton extends React.Component<
@@ -24,12 +26,13 @@ export default class SoundGeneratorButton extends React.Component<
   constructor(props: Props) {
     super(props); // Chamamos o construtor do pai herdado
 
-    const setMidiState = (midiState: Midi) =>
-      this.setState({ midiState: midiState });
+    const playMidi = (midiState: Midi) =>
+      this.setState({ midiState: midiState, playingSound: true });
 
     this.state = {
-      instrumentLibrary: new MidiPlayer(setMidiState, props.initialInstrument),
+      instrumentLibrary: new MidiPlayer(playMidi, props.initialInstrument),
       midiState: new Midi(),
+      playingSound: false,
     };
 
     // Aqui damos um bind na definição do metodo com o objeto construido
@@ -47,14 +50,26 @@ export default class SoundGeneratorButton extends React.Component<
 
   // Metodo render do componente define o que vai ser desenhado na tela
   public render() {
+    const midiData = `data:audio/midi;base64,${base64.bytesToBase64(
+      this.state.midiState.toArray()
+    )}`;
     return (
       <div>
         <div style={{ display: "inline-block" }}>
           <button className={"btn btn-primary"} onClick={this.handlePlayClick}>
             Gerar
           </button>
+
+          {this.state.playingSound && (
+            //@ts-ignore
+            <bg-sound src={midiData} />
+          )}
         </div>
       </div>
     );
   }
+}
+
+function base64Midi(midi: Midi) {
+  return base64.bytesToBase64(midi.toArray());
 }

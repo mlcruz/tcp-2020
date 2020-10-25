@@ -3,44 +3,40 @@ import { Midi, Track, Header } from "@tonejs/midi";
 import {
   MidiInstrument,
   InstrumentInput,
-  MidiNote,
   Pitch,
   Command,
 } from "./MidiInstrument";
 import { PolySynth } from "tone";
-import { Note } from "@tonejs/midi/dist/Note";
-
 export class MidiPlayer {
-  // private InstrumentLibrary: { [key in ToneJsInstrument]: Instrument };
-  private setMidiState: (midiState: Midi) => void;
   private initialInstrument: MidiInstrument;
-  private synth: PolySynth;
+  private player: any;
   private bpm: number;
-
+  private playMidi: (midiState: Midi) => void;
   private currentOctave: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
   constructor(
     setMidiState: (midiState: Midi) => void,
     initialInstrument: MidiInstrument
   ) {
-    this.setMidiState = setMidiState;
     this.initialInstrument = initialInstrument;
     this.currentOctave = 3;
     this.bpm = 60;
-    this.synth = new PolySynth();
-  }
-
-  private async waitPeriod() {
-    await timer((60 / this.bpm) * 1000);
+    this.playMidi = setMidiState;
   }
 
   public async resetState() {}
 
   public async playInput(input: string) {
+    // Transformamos nosso texto puro em um verto de notas/comandos
     const parsedInput = this.parseInput(input);
+
+    // generamos uma track de um midi a partir do input anterior
     const track = this.generateTrackFromInstrumentInput(parsedInput);
 
-    this.synth.toMaster();
+    const midi = new Midi();
+    midi.tracks.push(track);
+
+    this.playMidi(midi);
   }
 
   private parseInput(input: string): InstrumentInput[] {
@@ -97,8 +93,6 @@ export class MidiPlayer {
 
     parsedInputList.forEach((parsedInput) => {
       if (parsedInput.type == "NOTE") {
-        const noteName = parsedInput.pitch + parsedInput.octave.toString();
-
         track.addNote({
           octave: parsedInput.octave,
           time: parsedInput.bpm / 60,
