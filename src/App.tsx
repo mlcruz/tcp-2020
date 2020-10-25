@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SoundGeneratorButton from "./components/SoundGeneratorButton";
-import { parseNotesFromText } from "./utils/parseTextInput";
 import { SampleLibrary } from "./external-packages/tone-instruments/Tonejs-Instruments";
+import { MidiInstrument } from "./class/MidiInstrument";
 
 // Componente principal da aplicação.
 // Utilizamos aqui um componente funcional em vez de um orientado a objetos
@@ -14,9 +14,7 @@ function App() {
   // esse campo.
   // O texto docampo então é passado como parametro para o componente gerador de som
 
-  const [textInput, setTextInput] = useState(
-    "ABCDEFGNUGFEDCBAIABCDEFG+GFEDCBAJJABCDMEFG-ABCD-DFG-GFD"
-  );
+  const [textInput, setTextInput] = useState("ABCDEFG");
 
   return (
     <div className="App">
@@ -35,8 +33,7 @@ function App() {
                 <li>J desce uma oitava</li>
 
                 <li>I Troca o instrumento</li>
-                <li>+ dobra o volume</li>
-                <li>- divide o volume por 2</li>
+
                 <li>Espaço para não tocar nada durante um periodo</li>
               </ul>
             </div>
@@ -55,14 +52,7 @@ function App() {
             <div className={"colm-6"}>
               <SoundGeneratorButton
                 input={textInput}
-                initialInstrument={"piano"}
-                instrumentsToLoad={[
-                  "guitar-acoustic",
-                  "piano",
-                  "bass-electric",
-                  "harp",
-                  "xylophone",
-                ]}
+                initialInstrument={MidiInstrument["acoustic-bass"]}
               ></SoundGeneratorButton>
             </div>
           </div>
