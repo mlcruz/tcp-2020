@@ -53,17 +53,15 @@ export default class SoundGeneratorButton extends React.Component<
     const midiData = `data:audio/midi;base64,${base64.bytesToBase64(
       this.state.midiState.toArray()
     )}`;
+
     return (
       <div>
-        <div style={{ display: "inline-block" }}>
+        <div>
           <button className={"btn btn-primary"} onClick={this.handlePlayClick}>
             Gerar
           </button>
-
-          {this.state.playingSound && (
-            //@ts-ignore
-            <bg-sound src={midiData} />
-          )}
+          <br></br>
+          <button>Tocar</button>
         </div>
       </div>
     );

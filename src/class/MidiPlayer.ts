@@ -7,6 +7,7 @@ import {
   Command,
 } from "./MidiInstrument";
 import { PolySynth } from "tone";
+
 export class MidiPlayer {
   private initialInstrument: MidiInstrument;
   private player: any;

@@ -13,6 +13,8 @@
     "@types/react-dom": "^16.9.0",
     "bg-sound": "^2.0.0",
     "byte-base64": "^1.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
