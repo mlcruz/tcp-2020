@@ -29,7 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "yarn build && aws s3 sync ./build s3://site-tcp-2020 --delete --acl public-read --exclude samples/**.*",
+    "deploy": "yarn build && aws s3 sync ./build s3://site-tcp-2020 --profile default-favet --delete --acl public-read --exclude samples/**.*",
     "deploy_sounds": "aws s3 sync ./samples s3://site-tcp-2020/samples --acl public-read"
   },
   "eslintConfig": {
