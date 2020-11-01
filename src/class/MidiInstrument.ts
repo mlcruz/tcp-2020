@@ -7,13 +7,12 @@ export enum MidiInstrument {
   "trumpet" = 57,
 }
 
+export type Octave = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 export type Pitch = "A" | "B" | "C" | "D" | "E" | "F" | "G";
 
 export type MidiNote = {
   type: "NOTE";
   pitch: Pitch;
-  octave: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-  bpm: number;
 };
 
 export type Command =
@@ -26,12 +25,12 @@ export type Command =
   | { type: "SILENCE" }
   | { type: "CHANGE_INSTRUMENT"; value: MidiInstrument };
 
-export type InstrumentInput = MidiNote | Command;
+export type SoundEvent = MidiNote | Command;
 
-export function isNOTE(input: InstrumentInput): input is MidiNote {
+export function isNOTE(input: SoundEvent): input is MidiNote {
   return input.type === "NOTE";
 }
 
-export function isCommand(input: InstrumentInput): input is Command {
+export function isCommand(input: SoundEvent): input is Command {
   return !isNOTE(input);
 }

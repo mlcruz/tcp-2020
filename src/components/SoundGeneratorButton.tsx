@@ -2,9 +2,13 @@ import React from "react";
 import * as base64 from "byte-base64";
 
 // Importamos bibliotecas definidas em from ...
-import { MidiPlayer } from "../class/MidiPlayer";
+import { MidiGenerator } from "../class/MidiGenerator";
 import { Midi } from "@tonejs/midi";
 import { MidiInstrument } from "../class/MidiInstrument";
+import { MusicInputParser } from "../class/MusicInputParser";
+
+//@ts-ignore
+const MIDIJS = MIDIjs;
 
 // Props são os "parametros" do construtor de nosso componente (ver App.tsx)
 type Props = {
@@ -12,28 +16,11 @@ type Props = {
   initialInstrument: MidiInstrument;
 };
 
-// Estado é o estado mutavel de nosso component.
-type State = {
-  instrumentLibrary: MidiPlayer;
-  midiState: Midi;
-  playingSound: boolean;
-};
-
 export default class SoundGeneratorButton extends React.Component<
-  Props, // Nossas props definidas acima (válido só pra esse componente)
-  State // Nosso state definido acima (válido só pra esse componente)
+  Props // Nossas props definidas acima (válido só pra esse componente)
 > {
   constructor(props: Props) {
     super(props); // Chamamos o construtor do pai herdado
-
-    const playMidi = (midiState: Midi) =>
-      this.setState({ midiState: midiState, playingSound: true });
-
-    this.state = {
-      instrumentLibrary: new MidiPlayer(playMidi, props.initialInstrument),
-      midiState: new Midi(),
-      playingSound: false,
-    };
 
     // Aqui damos um bind na definição do metodo com o objeto construido
     // Pode ignorar isso, é só mais uma bizarrice de js orientado a objetos
@@ -42,32 +29,43 @@ export default class SoundGeneratorButton extends React.Component<
 
   // handleClick é chamado pelo botão ao ser clicado
   private async handlePlayClick() {
-    this.state.instrumentLibrary.resetState();
     const input = this.props.input;
-
-    await this.state.instrumentLibrary.playInput(input);
   }
 
   // Metodo render do componente define o que vai ser desenhado na tela
   public render() {
+    const midiGenerator = new MidiGenerator(this.props.initialInstrument);
+    const inputParser = new MusicInputParser();
+
+    const soundEvents = inputParser.parseInput(this.props.input);
+    const midi = midiGenerator.generateMidiFromSoundEvents(soundEvents);
+
     const midiData = `data:audio/midi;base64,${base64.bytesToBase64(
-      this.state.midiState.toArray()
+      midi.toArray()
     )}`;
 
     return (
       <div>
         <div>
-          <button className={"btn btn-primary"} onClick={this.handlePlayClick}>
-            Gerar
+          <br></br>
+          <button
+            className={"btn btn-primary"}
+            onClick={() => {
+              MIDIJS.play(midiData);
+            }}
+          >
+            Tocar
           </button>
           <br></br>
-          <button>Tocar</button>
+          <a
+            href={midiData}
+            className={"btn btn-primary"}
+            download="generated.midi"
+          >
+            Download
+          </a>
         </div>
       </div>
     );
   }
-}
-
-function base64Midi(midi: Midi) {
-  return base64.bytesToBase64(midi.toArray());
 }
