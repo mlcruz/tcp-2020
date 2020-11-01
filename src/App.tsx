@@ -27,11 +27,6 @@ function App() {
               <strong>Lista de comandos:</strong>
               <ul>
                 <li>Uma nota é um caractere seguido de A até G (maiusculo).</li>
-                <li>M aumenta o BPM em 50</li>
-                <li>N diminui o BPM em 50</li>
-                <li>U sobe uma oitava</li>
-                <li>J desce uma oitava</li>
-
                 <li>I Troca o instrumento</li>
 
                 <li>Espaço para não tocar nada durante um periodo</li>
@@ -52,7 +47,7 @@ function App() {
             <div className={"colm-6"}>
               <SoundGeneratorButton
                 input={textInput}
-                initialInstrument={MidiInstrument["acoustic-bass"]}
+                initialInstrument={MidiInstrument["trumpet"]}
               ></SoundGeneratorButton>
             </div>
           </div>

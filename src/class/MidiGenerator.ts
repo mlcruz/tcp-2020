@@ -10,7 +10,7 @@ import {
 import { PolySynth } from "tone";
 
 type MidiState = {
-  index: number;
+  currentTime: number;
   bpm: number;
   instrument: MidiInstrument;
   octave: Octave;
@@ -20,11 +20,19 @@ export class MidiGenerator {
   private initialInstrument: MidiInstrument;
   private state: MidiState;
 
+  private instrumentList = [
+    MidiInstrument["acoustic-bass"],
+    MidiInstrument["acoustic-guitar"],
+    MidiInstrument["acoustic-piano"],
+    MidiInstrument.trumpet,
+    MidiInstrument.violin,
+  ];
+
   constructor(initialInstrument: MidiInstrument) {
     this.initialInstrument = initialInstrument;
     this.state = {
       bpm: 60,
-      index: 0,
+      currentTime: 0,
       instrument: initialInstrument,
       octave: 3,
     };
@@ -34,35 +42,41 @@ export class MidiGenerator {
 
   public generateMidiFromSoundEvents(parsedInputList: SoundEvent[]): Midi {
     const midi = new Midi();
-    const track = new Track([], new Header());
 
-    track.instrument.number = this.initialInstrument;
+    let index = 0;
 
-    while (this.state.index < parsedInputList.length) {
+    while (index < parsedInputList.length) {
       // Cada instrumento precisa de uma nova track, então separamos os blocos de eventos por instrumento
-
-      const instrumentChangeIndex = parsedInputList.findIndex(
-        (element) => element.type == "CHANGE_INSTRUMENT"
-      );
+      const instrumentChangeIndex = parsedInputList
+        .slice(index)
+        .findIndex((element) => element.type == "CHANGE_INSTRUMENT");
 
       // Dividimos o bloco de um intrumento, se existe alguma instrução de troca de instrumentos
       if (instrumentChangeIndex >= 0) {
         let instrumentTrackEvents = parsedInputList.slice(
-          this.state.index,
+          index,
           instrumentChangeIndex
         );
 
         const track = this.generateTrackFromSoundEvents(instrumentTrackEvents);
         midi.tracks.push(track);
 
+        // trocamos o instrumento por algum outro aletorio
+        this.state.instrument = this.getRandomInstrument();
+
         // Pulamos o evento de troca de instrumento em si
-        this.state.index += instrumentChangeIndex + 1;
+        index += instrumentChangeIndex + 1;
+
+        console.log(track);
       } else {
         // Não existe mais nenhuma troca de instrumentos, então geramos o resto da track
         const track = this.generateTrackFromSoundEvents(
-          parsedInputList.slice(this.state.index)
+          parsedInputList.slice(index)
         );
+
         midi.tracks.push(track);
+        console.log(track);
+
         break;
       }
     }
@@ -77,17 +91,37 @@ export class MidiGenerator {
     for (let i = 0; i < soundEventList.length; i++) {
       const event = soundEventList[i];
 
-      const midiIndex = i + this.state.index;
+      const period = this.state.bpm / 60;
 
-      if (event.type == "NOTE") {
-        track.addNote({
-          duration: this.state.bpm / 60,
-          time: midiIndex * (this.state.bpm / 60),
-          pitch: event.pitch,
-          octave: this.state.octave,
-        });
+      switch (event.type) {
+        case "NOTE": {
+          track.addNote({
+            duration: period,
+            time: this.state.currentTime * period,
+            pitch: event.pitch,
+            octave: this.state.octave,
+          });
+
+          this.state.currentTime += period;
+        }
       }
     }
     return track;
+  }
+
+  private getRandomInstrument(): MidiInstrument {
+    const now = new Date().getTime();
+    const randomIndex = now % this.instrumentList.length;
+
+    let randomInstrument = this.instrumentList[randomIndex];
+
+    if (randomInstrument != this.state.instrument) {
+      return randomInstrument;
+    }
+
+    const newRandomIndex = (this.state.instrument =
+      (now + 1) % this.instrumentList.length);
+
+    return this.instrumentList[newRandomIndex];
   }
 }
