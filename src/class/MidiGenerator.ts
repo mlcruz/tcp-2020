@@ -8,6 +8,7 @@ import {
   Octave,
 } from "./MidiInstrument";
 import { PolySynth } from "tone";
+var MidiWriter = require("midi-writer-js");
 
 type MidiState = {
   currentTime: number;
@@ -59,7 +60,6 @@ export class MidiGenerator {
         );
 
         const track = this.generateTrackFromSoundEvents(instrumentTrackEvents);
-        midi.tracks.push(track);
 
         // trocamos o instrumento por algum outro aletorio
         this.state.instrument = this.getRandomInstrument();
@@ -67,14 +67,16 @@ export class MidiGenerator {
         // Pulamos o evento de troca de instrumento em si
         index += instrumentChangeIndex + 1;
 
+        midi.tracks.push(track);
         console.log(track);
       } else {
         // Não existe mais nenhuma troca de instrumentos, então geramos o resto da track
         const track = this.generateTrackFromSoundEvents(
           parsedInputList.slice(index)
         );
+        track.addCC({ number: 4, value: 10, time: 0 });
+        track.instrument.number = this.state.instrument;
 
-        midi.tracks.push(track);
         console.log(track);
 
         break;
