@@ -41,7 +41,7 @@ export default class SoundGeneratorButton extends React.Component<
     const midi = midiGenerator.generateMidiFromSoundEvents(soundEvents);
 
     const midiData = `data:audio/midi;base64,${base64.bytesToBase64(
-      midi.toArray()
+      midi.buildFile()
     )}`;
 
     return (

@@ -28,8 +28,6 @@ function App() {
               <ul>
                 <li>Uma nota é um caractere seguido de A até G (maiusculo).</li>
                 <li>I Troca o instrumento</li>
-
-                <li>Espaço para não tocar nada durante um periodo</li>
               </ul>
             </div>
           </div>

@@ -8,7 +8,9 @@ import {
   Octave,
 } from "./MidiInstrument";
 import { PolySynth } from "tone";
-var MidiWriter = require("midi-writer-js");
+// https://github.com/grimmdude/MidiWriterJS
+//@ts-ignore
+import MidiWriter from "midi-writer-js";
 
 type MidiState = {
   currentTime: number;
@@ -41,74 +43,42 @@ export class MidiGenerator {
 
   public async resetState() {}
 
-  public generateMidiFromSoundEvents(parsedInputList: SoundEvent[]): Midi {
+  public generateMidiFromSoundEvents(parsedInputList: SoundEvent[]) {
     const midi = new Midi();
+    var track = new MidiWriter.Track();
+    track.addEvent(
+      new MidiWriter.ProgramChangeEvent({ instrument: this.state.instrument })
+    );
 
-    let index = 0;
-
-    while (index < parsedInputList.length) {
-      // Cada instrumento precisa de uma nova track, então separamos os blocos de eventos por instrumento
-      const instrumentChangeIndex = parsedInputList
-        .slice(index)
-        .findIndex((element) => element.type == "CHANGE_INSTRUMENT");
-
-      // Dividimos o bloco de um intrumento, se existe alguma instrução de troca de instrumentos
-      if (instrumentChangeIndex >= 0) {
-        let instrumentTrackEvents = parsedInputList.slice(
-          index,
-          instrumentChangeIndex
-        );
-
-        const track = this.generateTrackFromSoundEvents(instrumentTrackEvents);
-
-        // trocamos o instrumento por algum outro aletorio
-        this.state.instrument = this.getRandomInstrument();
-
-        // Pulamos o evento de troca de instrumento em si
-        index += instrumentChangeIndex + 1;
-
-        midi.tracks.push(track);
-        console.log(track);
-      } else {
-        // Não existe mais nenhuma troca de instrumentos, então geramos o resto da track
-        const track = this.generateTrackFromSoundEvents(
-          parsedInputList.slice(index)
-        );
-        track.addCC({ number: 4, value: 10, time: 0 });
-        track.instrument.number = this.state.instrument;
-
-        console.log(track);
-
-        break;
-      }
-    }
-
-    return midi;
-  }
-
-  private generateTrackFromSoundEvents(soundEventList: SoundEvent[]): Track {
-    const track = new Track([], new Header());
-    track.instrument.number = this.state.instrument;
-
-    for (let i = 0; i < soundEventList.length; i++) {
-      const event = soundEventList[i];
-
-      const period = this.state.bpm / 60;
+    for (let i = 0; i < parsedInputList.length; i++) {
+      const period = "4";
+      const event = parsedInputList[i];
 
       switch (event.type) {
         case "NOTE": {
-          track.addNote({
+          var note = new MidiWriter.NoteEvent({
+            pitch: [
+              `${event.pitch}${this.state.octave.toString().toUpperCase()}`,
+            ],
             duration: period,
-            time: this.state.currentTime * period,
-            pitch: event.pitch,
-            octave: this.state.octave,
           });
 
-          this.state.currentTime += period;
+          track.addEvent(note);
+          break;
+        }
+        case "CHANGE_INSTRUMENT": {
+          this.state.instrument = this.getRandomInstrument();
+          track.addEvent(
+            new MidiWriter.ProgramChangeEvent({
+              instrument: this.state.instrument,
+            })
+          );
+          break;
         }
       }
     }
-    return track;
+    const data = new MidiWriter.Writer(track);
+    return data;
   }
 
   private getRandomInstrument(): MidiInstrument {
