@@ -44,14 +44,13 @@ export class MidiGenerator {
   public async resetState() {}
 
   public generateMidiFromSoundEvents(parsedInputList: SoundEvent[]) {
-    const midi = new Midi();
     var track = new MidiWriter.Track();
     track.addEvent(
       new MidiWriter.ProgramChangeEvent({ instrument: this.state.instrument })
     );
 
     for (let i = 0; i < parsedInputList.length; i++) {
-      const period = "4";
+      const period = this.beatPeriod();
       const event = parsedInputList[i];
 
       switch (event.type) {
@@ -87,7 +86,7 @@ export class MidiGenerator {
 
     let randomInstrument = this.instrumentList[randomIndex];
 
-    if (randomInstrument != this.state.instrument) {
+    if (randomInstrument !== this.state.instrument) {
       return randomInstrument;
     }
 
@@ -95,5 +94,18 @@ export class MidiGenerator {
       (now + 1) % this.instrumentList.length);
 
     return this.instrumentList[newRandomIndex];
+  }
+
+  // Beats são descritos em ticks de 1/128 de 2 segundos na biblioteca no seguinte formato:
+  // Tn : where n is an explicit number of ticks (T128 = 1 beat)
+  private beatPeriod(): string {
+    // o periodo em é igual a 60 / bpm
+    const period = 60 / this.state.bpm;
+
+    // para um periodo de 1 segundo, temos 64 ticks
+    // para um periodo de x, temos um numero inteiro de (x * 64) ticks
+    const beatTicks = Math.round(period * 64).toFixed();
+
+    return `T${beatTicks}`;
   }
 }
