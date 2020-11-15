@@ -27,10 +27,10 @@ export type Command =
 
 export type SoundEvent = MidiNote | Command;
 
-export function isNOTE(input: SoundEvent): input is MidiNote {
+export function isNote(input: SoundEvent): input is MidiNote {
   return input.type === "NOTE";
 }
 
 export function isCommand(input: SoundEvent): input is Command {
-  return !isNOTE(input);
+  return !isNote(input);
 }
