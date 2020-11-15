@@ -17,19 +17,20 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className="container">
-          <div style={{ marginTop: "10%" }}></div>
-          <div className="row justify-content-center align-items-center">
-            <div className={"alert alert-primary"}>
-              <p>Insira o texto para gerar o som na caixa abaixo</p>
-              <strong>Lista de comandos:</strong>
-              <ul>
-                <li>Uma nota é um caractere seguido de A até G (maiusculo).</li>
-                <li>I Troca o instrumento</li>
-              </ul>
+          <div style={{ marginTop: "10%" }}>
+            <div className="row justify-content-center align-items-center">
+              <div className={"alert alert-primary"}>
+                <p>Insira o texto para gerar o som na caixa abaixo</p>
+                <strong>Lista de comandos:</strong>
+                <ul>
+                  <li>
+                    Uma nota é um caractere seguido de A até G (maiusculo).
+                  </li>
+                  <li>I Troca o instrumento</li>
+                </ul>
+              </div>
             </div>
-          </div>
-          <div className="row justify-content-center align-items-center">
-            <div className={"col-sm-6"}>
+            <div className="row">
               <textarea
                 className="form-control"
                 value={textInput}
@@ -37,8 +38,6 @@ function App() {
                   setTextInput(e.target.value);
                 }}
               ></textarea>
-            </div>
-            <div className={"colm-6"}>
               <SoundGeneratorButton input={textInput}></SoundGeneratorButton>
             </div>
           </div>

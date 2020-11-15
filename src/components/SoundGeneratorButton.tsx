@@ -29,26 +29,25 @@ export default class SoundGeneratorButton extends React.Component<
     )}`;
 
     return (
-      <div>
-        <div>
-          <br></br>
-          <button
-            className={"btn btn-primary"}
-            onClick={() => {
-              MIDIJS.play(midiData);
-            }}
-          >
-            Tocar
-          </button>
-          <br></br>
-          <a
-            href={midiData}
-            className={"btn btn-primary"}
-            download="generated.midi"
-          >
-            Download
-          </a>
-        </div>
+      <div style={{ position: "relative", width: "100%", marginTop: 5 }}>
+        <button
+          className={"btn btn-primary"}
+          onClick={() => {
+            MIDIJS.play(midiData);
+          }}
+        >
+          Tocar
+        </button>{" "}
+        <a
+          href={midiData}
+          className={"btn btn-primary"}
+          download="generated.midi"
+        >
+          Download
+        </a>{" "}
+        <button className={"btn btn-primary"} style={{ float: "right" }}>
+          Abrir arquivo
+        </button>
       </div>
     );
   }
