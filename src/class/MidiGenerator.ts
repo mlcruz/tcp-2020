@@ -13,7 +13,7 @@ export class MidiGenerator {
     this.instrument = 1;
     this.octave = 1;
     this.lastEvent = null;
-    this.volume = 20;
+    this.volume = 50;
   }
 
   public generateMidiFromSoundEvents(parsedInputList: SoundEvent[]) {
@@ -22,6 +22,7 @@ export class MidiGenerator {
       new MidiWriter.ProgramChangeEvent({ instrument: this.instrument })
     );
 
+    console.log(parsedInputList);
     for (let i = 0; i < parsedInputList.length; i++) {
       // 1/4 de 2 segundos
       const period = "2";
@@ -87,10 +88,8 @@ export class MidiGenerator {
           break;
         }
         case "DOUBLE_VOLUME":
-          {
-            const newVolume = this.volume * 2;
-            this.volume = newVolume > 100 ? 20 : newVolume;
-          }
+          const newVolume = this.volume * 2;
+          this.volume = newVolume > 100 ? 20 : newVolume;
           break;
       }
       this.lastEvent = event;
