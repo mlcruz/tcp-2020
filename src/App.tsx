@@ -31,14 +31,13 @@ function App() {
           </div>
           <div className="row justify-content-center align-items-center">
             <div className={"col-sm-6"}>
-              <input
-                type="text"
+              <textarea
                 className="form-control"
                 value={textInput}
                 onChange={(e) => {
                   setTextInput(e.target.value);
                 }}
-              />
+              ></textarea>
             </div>
             <div className={"colm-6"}>
               <SoundGeneratorButton

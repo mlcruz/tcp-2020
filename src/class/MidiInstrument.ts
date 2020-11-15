@@ -142,7 +142,6 @@ export type Command =
   | { type: "REPEAT_LAST_OR_SILENCE" }
   | { type: "DOUBLE_VOLUME" }
   | { type: "INCREASE_OCTAVE" }
-  | { type: "SILENCE" }
   | { type: "CHANGE_INSTRUMENT"; value: MidiInstrument }
   | { type: "ADD_TO_INSTRUMENT_NUMBER"; value: number };
 
