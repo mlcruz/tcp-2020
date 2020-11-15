@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import SoundGeneratorButton from "./components/SoundGeneratorButton";
-import { MidiInstrument } from "./class/MidiInstrument";
 
 // Componente principal da aplicação.
 // Utilizamos aqui um componente funcional em vez de um orientado a objetos
@@ -40,10 +39,7 @@ function App() {
               ></textarea>
             </div>
             <div className={"colm-6"}>
-              <SoundGeneratorButton
-                input={textInput}
-                initialInstrument={MidiInstrument["trumpet"]}
-              ></SoundGeneratorButton>
+              <SoundGeneratorButton input={textInput}></SoundGeneratorButton>
             </div>
           </div>
         </div>

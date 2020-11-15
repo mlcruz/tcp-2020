@@ -9,7 +9,7 @@ export class MidiGenerator {
   private lastEvent: SoundEvent | null;
   private volume: number;
 
-  constructor(initialInstrument: MidiInstrument) {
+  constructor() {
     this.instrument = 1;
     this.octave = 1;
     this.lastEvent = null;
