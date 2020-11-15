@@ -23,14 +23,6 @@ export class MidiGenerator {
   private initialInstrument: MidiInstrument;
   private state: MidiState;
 
-  private instrumentList = [
-    MidiInstrument["acoustic-bass"],
-    MidiInstrument["acoustic-guitar"],
-    MidiInstrument["acoustic-piano"],
-    MidiInstrument.trumpet,
-    MidiInstrument.violin,
-  ];
-
   constructor(initialInstrument: MidiInstrument) {
     this.initialInstrument = initialInstrument;
     this.state = {
@@ -66,34 +58,18 @@ export class MidiGenerator {
           break;
         }
         case "CHANGE_INSTRUMENT": {
-          this.state.instrument = this.getRandomInstrument();
-          track.addEvent(
-            new MidiWriter.ProgramChangeEvent({
-              instrument: this.state.instrument,
-            })
-          );
+          // this.state.instrument = this.getRandomInstrument();
+          // track.addEvent(
+          //   new MidiWriter.ProgramChangeEvent({
+          //     instrument: this.state.instrument,
+          //   })
+          // );
           break;
         }
       }
     }
     const data = new MidiWriter.Writer(track);
     return data;
-  }
-
-  private getRandomInstrument(): MidiInstrument {
-    const now = new Date().getTime();
-    const randomIndex = now % this.instrumentList.length;
-
-    let randomInstrument = this.instrumentList[randomIndex];
-
-    if (randomInstrument !== this.state.instrument) {
-      return randomInstrument;
-    }
-
-    const newRandomIndex = (this.state.instrument =
-      (now + 1) % this.instrumentList.length);
-
-    return this.instrumentList[newRandomIndex];
   }
 
   // Beats são descritos em ticks de 1/128 de 2 segundos na biblioteca no seguinte formato:

@@ -139,14 +139,12 @@ export type MidiNote = {
 };
 
 export type Command =
+  | { type: "REPEAT_LAST_OR_SILENCE" }
   | { type: "DOUBLE_VOLUME" }
-  | { type: "HALF_VOLUME" }
-  | { type: "DOUBLE_BPM" }
-  | { type: "HALF_BPM" }
   | { type: "INCREASE_OCTAVE" }
-  | { type: "DECREASE_OCTACE" }
   | { type: "SILENCE" }
-  | { type: "CHANGE_INSTRUMENT"; value: MidiInstrument };
+  | { type: "CHANGE_INSTRUMENT"; value: MidiInstrument }
+  | { type: "ADD_TO_INSTRUMENT_NUMBER"; value: number };
 
 export type SoundEvent = MidiNote | Command;
 

@@ -30,25 +30,45 @@ export class MusicInputParser {
 
   private parseCommand(char: string): Command {
     switch (char) {
-      case "M":
-        return { type: "DOUBLE_BPM" };
-      case "N":
-        return { type: "HALF_BPM" };
-      case "+":
-        return { type: "DOUBLE_VOLUME" };
-      case "-":
-        return { type: "HALF_VOLUME" };
-      case "U":
-        return { type: "INCREASE_OCTAVE" };
-      case "J":
-        return { type: "DECREASE_OCTACE" };
+      case " ":
+        return {
+          type: "DOUBLE_VOLUME",
+        };
+      case "!":
+        return { type: "CHANGE_INSTRUMENT", value: MidiInstrument.agogo };
+      case "A" || "E" || "I" || "O" || "U" || "a" || "e" || "i" || "o" || "u":
+        return { type: "CHANGE_INSTRUMENT", value: MidiInstrument.harsichord };
       case "I":
         return {
           type: "CHANGE_INSTRUMENT",
           value: MidiInstrument["acoustic-guitar"],
         };
+      case "1" || "2" || "3" || "4" || "5" || "6" || "7" || "8" || "9" || "0":
+        return {
+          type: "ADD_TO_INSTRUMENT_NUMBER",
+          value: +char,
+        };
+      case "?":
+        return {
+          type: "INCREASE_OCTAVE",
+        };
+      case "\n":
+        return {
+          type: "CHANGE_INSTRUMENT",
+          value: MidiInstrument["tubular-bells"],
+        };
+      case ";":
+        return {
+          type: "CHANGE_INSTRUMENT",
+          value: MidiInstrument["pan-flute"],
+        };
+      case ",":
+        return {
+          type: "CHANGE_INSTRUMENT",
+          value: MidiInstrument["church-organ"],
+        };
       default:
-        return { type: "SILENCE" };
+        return { type: "REPEAT_LAST_OR_SILENCE" };
     }
   }
 }
