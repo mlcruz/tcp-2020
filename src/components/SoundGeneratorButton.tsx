@@ -29,7 +29,7 @@ export default class SoundGeneratorButton extends React.Component<
     )}`;
 
     return (
-      <div style={{ position: "relative", width: "100%", marginTop: 5 }}>
+      <div style={{ position: "relative", width: "100%", marginTop: 10 }}>
         <button
           className={"btn btn-primary"}
           onClick={() => {
