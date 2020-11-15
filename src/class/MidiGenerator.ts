@@ -22,7 +22,6 @@ export class MidiGenerator {
       new MidiWriter.ProgramChangeEvent({ instrument: this.instrument })
     );
 
-    console.log(parsedInputList);
     for (let i = 0; i < parsedInputList.length; i++) {
       // 1/4 de 2 segundos
       const period = "2";
