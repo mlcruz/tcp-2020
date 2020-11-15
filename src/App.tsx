@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import SoundGeneratorButton from "./components/SoundGeneratorButton";
 import { MidiInstrument } from "./class/MidiInstrument";
-import WebMidi from "webmidi";
 
 // Componente principal da aplicação.
 // Utilizamos aqui um componente funcional em vez de um orientado a objetos
@@ -10,8 +9,7 @@ import WebMidi from "webmidi";
 // Um componente funcionar retornando é o equivalente de uma chamada do render() em um compoennete orientado a objetos
 
 function App() {
-  // Aqui criamos um estado para o campo de texto, iniciando vazio. A ideia é que o input vai modificar
-  // esse campo.
+  // Aqui criamos um estado para o campo de texto, iniciando vazio. A ideia é que o input vai modificar  esse campo.
   // O texto docampo então é passado como parametro para o componente gerador de som
 
   const [textInput, setTextInput] = useState("ABCDEFG");

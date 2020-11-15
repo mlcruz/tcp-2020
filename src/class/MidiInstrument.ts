@@ -147,11 +147,3 @@ export type Command =
   | { type: "ADD_TO_INSTRUMENT_NUMBER"; value: number };
 
 export type SoundEvent = MidiNote | Command;
-
-export function isNote(input: SoundEvent): input is MidiNote {
-  return input.type === "NOTE";
-}
-
-export function isCommand(input: SoundEvent): input is Command {
-  return !isNote(input);
-}
