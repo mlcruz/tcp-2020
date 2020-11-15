@@ -45,9 +45,12 @@ export default class SoundGeneratorButton extends React.Component<
         >
           Download
         </a>{" "}
-        <button className={"btn btn-primary"} style={{ float: "right" }}>
-          Abrir arquivo
-        </button>
+        <label
+          className="btn btn-secondary btn-file"
+          style={{ float: "right" }}
+        >
+          Selecionar Arquivo <input type="file" style={{ display: "none" }} />
+        </label>
       </div>
     );
   }
