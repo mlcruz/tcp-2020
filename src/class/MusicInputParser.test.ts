@@ -87,15 +87,26 @@ it("parse consoante para silencio ou pausa", () => {
   }
 });
 
-// it("parse par ou impar soma no numero instrumento", () => {
-//   const input = "hjklmnpqrstvxwyzHJKLMNPQRSTVXWYZ";
+it("parse par ou impar soma no numero instrumento", () => {
+  const input = "0123456789";
 
-//   const expected: SoundEvent[] = [{ type: "ADD_TO_INSTRUMENT_NUMBER" }];
+  const expected: SoundEvent[] = [
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 0 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 1 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 2 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 3 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 4 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 5 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 6 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 7 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 8 },
+    { type: "ADD_TO_INSTRUMENT_NUMBER", value: 9 },
+  ];
 
-//   const inputParser = new MusicInputParser();
+  const inputParser = new MusicInputParser();
 
-//   const result = inputParser.parseInput(input);
-//   for (let index = 0; index < expected.length; index++) {
-//     expect(result[index]).toEqual(expected[index]);
-//   }
-// });
+  const result = inputParser.parseInput(input);
+  for (let index = 0; index < expected.length; index++) {
+    expect(result[index]).toEqual(expected[index]);
+  }
+});
