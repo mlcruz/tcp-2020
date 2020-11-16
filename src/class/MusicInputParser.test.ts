@@ -1,0 +1,101 @@
+import { MusicInputParser } from "./MusicInputParser";
+import { SoundEvent, MidiInstrument } from "./MidiInstrument";
+
+it("parse notas de A-G em sequencia", () => {
+  const input = "ABCDEFG";
+
+  const expected: SoundEvent[] = [
+    { type: "NOTE", pitch: "A" },
+    { type: "NOTE", pitch: "B" },
+    { type: "NOTE", pitch: "C" },
+    { type: "NOTE", pitch: "D" },
+    { type: "NOTE", pitch: "E" },
+    { type: "NOTE", pitch: "F" },
+    { type: "NOTE", pitch: "G" },
+  ];
+
+  const inputParser = new MusicInputParser();
+
+  const result = inputParser.parseInput(input);
+  for (let index = 0; index < expected.length; index++) {
+    expect(result[index]).toEqual(expected[index]);
+  }
+});
+
+it("parse a-g em seguencia para comando de silencio", () => {
+  const input = "abcedfg";
+
+  const expected: SoundEvent[] = [
+    { type: "REPEAT_LAST_OR_SILENCE" },
+    { type: "REPEAT_LAST_OR_SILENCE" },
+    { type: "REPEAT_LAST_OR_SILENCE" },
+    { type: "REPEAT_LAST_OR_SILENCE" },
+    { type: "REPEAT_LAST_OR_SILENCE" },
+    { type: "REPEAT_LAST_OR_SILENCE" },
+    { type: "REPEAT_LAST_OR_SILENCE" },
+  ];
+
+  const inputParser = new MusicInputParser();
+
+  const result = inputParser.parseInput(input);
+
+  for (let index = 0; index < expected.length; index++) {
+    expect(result[index]).toEqual(expected[index]);
+  }
+});
+
+it("parse ! para agogo", () => {
+  const input = "!";
+
+  const expected: SoundEvent = {
+    type: "CHANGE_INSTRUMENT",
+    value: MidiInstrument.agogo,
+  };
+  const inputParser = new MusicInputParser();
+  const result = inputParser.parseInput(input);
+
+  expect(result[0]).toEqual(expected);
+});
+
+it("parse iouIOU para harpsichord", () => {
+  const input = "iouIOU";
+
+  const expected = {
+    type: "CHANGE_INSTRUMENT",
+    value: MidiInstrument.harsichord,
+  };
+  const inputParser = new MusicInputParser();
+
+  const result = inputParser.parseInput(input);
+
+  for (let index = 0; index < result.length; index++) {
+    expect(expected).toEqual(result[index]);
+  }
+});
+
+it("parse consoante para silencio ou pausa", () => {
+  const input = "hjklmnpqrstvxwyzHJKLMNPQRSTVXWYZ";
+
+  const expected: SoundEvent = { type: "REPEAT_LAST_OR_SILENCE" };
+
+  const inputParser = new MusicInputParser();
+
+  const result = inputParser.parseInput(input);
+
+  for (let index = 0; index < result.length; index++) {
+    expect(expected).toEqual(result[index]);
+  }
+});
+
+// it("parse par ou impar soma no numero instrumento", () => {
+//   const input = "hjklmnpqrstvxwyzHJKLMNPQRSTVXWYZ";
+
+//   const expected: SoundEvent[] = [{ type: "ADD_TO_INSTRUMENT_NUMBER" }];
+
+//   const inputParser = new MusicInputParser();
+
+//   const result = inputParser.parseInput(input);
+//   for (let index = 0; index < expected.length; index++) {
+//     expect(result[index]).toEqual(expected[index]);
+//   }
+// });
