@@ -43,6 +43,11 @@ function App() {
                 <p style = {{paddingLeft: 20}}> - As letras: a,b,c,d,e,f ou g</p>
                 <p style = {{paddingLeft: 20}}> - Qualquer consoante que não esteja presente no conjunto de notas;</p>
                 <p style = {{paddingLeft: 20}}> - Qualquer outro caractere não referenciado nos outros tópicos.</p>
+                
+                <strong style = {{marginTop: 35}}>Para tocar a música aperte no botão 'Tocar' e para fazer o download dela, aperte em 'Download.'</strong>
+                
+                <p style = {{marginTop: 10}}>Boa composição, aproveite!</p>
+
                 {/* <strong>Lista de comandos:</strong>
                 <ul>
                   <li>
