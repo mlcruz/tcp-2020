@@ -110,3 +110,47 @@ it("parse par ou impar soma no numero instrumento", () => {
     expect(result[index]).toEqual(expected[index]);
   }
 });
+
+it("parse interrogação para aumentar oitava", () => {
+  const input = "?";
+
+  const expected: SoundEvent = {
+    type: "INCREASE_OCTAVE"
+  };
+
+  const inputParser = new MusicInputParser();
+
+  const result = inputParser.parseInput(input);
+  
+  expect(result[0]).toEqual(expected);
+});
+
+it("parse nova linha para tubular bells", () => {
+  const input = "\n";
+
+  const expected = {
+    type: "CHANGE_INSTRUMENT",
+    value: MidiInstrument["tubular-bells"],
+  };
+
+  const inputParser = new MusicInputParser();
+
+  const result = inputParser.parseInput(input);
+  
+  expect(result[0]).toEqual(expected);
+});
+
+it("parse virgula para church organ", () => {
+  const input = ",";
+
+  const expected = {
+    type: "CHANGE_INSTRUMENT",
+    value: MidiInstrument["church-organ"],
+  };
+
+  const inputParser = new MusicInputParser();
+
+  const result = inputParser.parseInput(input);
+  
+  expect(result[0]).toEqual(expected);
+});
