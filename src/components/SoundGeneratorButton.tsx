@@ -11,6 +11,7 @@ const MIDIJS = MIDIjs;
 // Props são os "parametros" do construtor de nosso componente (ver App.tsx)
 type Props = {
   input: string;
+  setInput: (val: string) => void;
 };
 
 export default class SoundGeneratorButton extends React.Component<
@@ -49,7 +50,20 @@ export default class SoundGeneratorButton extends React.Component<
           className="btn btn-secondary btn-file"
           style={{ float: "right" }}
         >
-          Selecionar Arquivo <input type="file" style={{ display: "none" }} />
+          Selecionar Arquivo{" "}
+          <input
+            id="file"
+            type="file"
+            style={{ display: "none" }}
+            onChange={(event) => {
+              if (event.target.files && event.target.files[0]) {
+                // @ts-ignore
+                event.target.files[0].text().then((p) => {
+                  this.props.setInput(p);
+                });
+              }
+            }}
+          />
         </label>
       </div>
     );
