@@ -323,3 +323,58 @@ it("midi generator parse A B C D - testa volume", () => {
   expect(+eventData[8].pitch[1]).toEqual(1);
   expect(eventData[8].velocity).toEqual(25);
 });
+
+it("midi generator parse Aa.pC - testa silencio ou repete ultima nota", () => {
+  const inputParser = new MusicInputParser();
+  const midiGenerator = new MidiGenerator();
+
+  const parsedInput = inputParser.parseInput("Aa.pC");
+
+  const generatedMidi = midiGenerator.generateMidiFromSoundEvents(parsedInput);
+
+  const eventData = generatedMidi.data[1].events;
+
+  // Primeiro comando é troca para instrumento inicial
+  const instrumentChangeEvent = eventData[0];
+
+  // program event type
+  expect(instrumentChangeEvent.type.includes("program")).toBeTruthy();
+
+  // A
+  expect(eventData[1].type.includes("note")).toBeTruthy();
+  expect(eventData[1].pitch[0]).toEqual("A");
+  expect(+eventData[1].pitch[1]).toEqual(1);
+  expect(eventData[1].velocity).toEqual(25);
+  expect(eventData[2].type.includes("note")).toBeTruthy();
+  expect(eventData[2].pitch[0]).toEqual("A");
+  expect(+eventData[2].pitch[1]).toEqual(1);
+  expect(eventData[2].velocity).toEqual(25);
+
+  // B
+  expect(eventData[3].type.includes("note")).toBeTruthy();
+  expect(eventData[3].pitch[0]).toEqual("A");
+  expect(+eventData[3].pitch[1]).toEqual(1);
+  expect(eventData[3].velocity).toEqual(25);
+  expect(eventData[4].type.includes("note")).toBeTruthy();
+  expect(eventData[4].pitch[0]).toEqual("A");
+  expect(+eventData[4].pitch[1]).toEqual(1);
+  expect(eventData[4].velocity).toEqual(25);
+
+  // Pausa
+  expect(eventData[5].type.includes("note")).toBeTruthy();
+  expect(eventData[5].pitch[0]).toEqual(" ");
+  expect(eventData[5].velocity).toEqual(0);
+  expect(eventData[6].type.includes("note")).toBeTruthy();
+  expect(eventData[6].pitch[0]).toEqual(" ");
+  expect(eventData[6].velocity).toEqual(0);
+
+  // C
+  expect(eventData[7].type.includes("note")).toBeTruthy();
+  expect(eventData[7].pitch[0]).toEqual("C");
+  expect(+eventData[7].pitch[1]).toEqual(2);
+  expect(eventData[7].velocity).toEqual(25);
+  expect(eventData[8].type.includes("note")).toBeTruthy();
+  expect(eventData[8].pitch[0]).toEqual("C");
+  expect(+eventData[8].pitch[1]).toEqual(2);
+  expect(eventData[8].velocity).toEqual(25);
+});
