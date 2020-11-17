@@ -58,8 +58,9 @@ function App() {
                   - <b>';'</b> para trocar para Flauta de pã;
                 </p>
                 <p style={{ paddingLeft: 20 }}>
-                  - Um numero de 0 à 9 para trocar para o instrumento referente
-                  ao numéro do instrumento atual somado com o numero digitado;
+                  - Um numero de <b>0 à 9</b> para trocar para o instrumento
+                  referente ao numéro do instrumento atual somado com o numero
+                  digitado;
                 </p>
 
                 <strong style={{ marginTop: 35 }}>
@@ -102,14 +103,6 @@ function App() {
                 </strong>
 
                 <p style={{ marginTop: 10 }}>Boa composição, aproveite!</p>
-
-                {/* <strong>Lista de comandos:</strong>
-                <ul>
-                  <li>
-                    Uma nota é um caractere seguido de A até G (maiusculo).
-                  </li>
-                  <li>I Troca o instrumento</li>
-                </ul> */}
               </div>
             </div>
             <div className="row">
