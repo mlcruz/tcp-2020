@@ -25,54 +25,65 @@ function App() {
               >
                 <strong style={{ fontSize: 16 }}>Instruções de uso:</strong>
                 <p style={{ paddingLeft: 10 }}>
-                  Insira o texto na caixa abaixo e/ou arquivo para gerar um som.
-                  Cada caractere corresponde a um tipo de nota ou ação, abaixo
-                  seguem as instruções:
+                  Insira o texto na caixa abaixo ou faça upload de um arquivo de
+                  texto para gerar um som. Cada caractere corresponde a um tipo
+                  de nota ou ação, abaixo seguem as instruções:
                 </p>
 
                 <strong style={{ marginTop: 15 }}>
-                  - Para tocar notas musicais, digite:
+                  - Para tocar alguma nota musical, digite:
                 </strong>
-                <p style={{ paddingLeft: 20 }}>As letras: A,B,C,D,E,F ou G</p>
+                <p style={{ paddingLeft: 20 }}>
+                  As letras: <b>A,B,C,D,E,F ou G</b>
+                </p>
 
                 <strong style={{ marginTop: 35 }}>
-                  - Para tocar o instrumento, digite:
+                  - Para trocar o instrumento, digite:
                 </strong>
-                <p style={{ paddingLeft: 20 }}>- '!' para trocar para Agogo;</p>
                 <p style={{ paddingLeft: 20 }}>
-                  - 'O,o,U,u,I,i' para trocar para Harpsichord;
+                  - <b>'!'</b> para trocar para Agogo;
                 </p>
                 <p style={{ paddingLeft: 20 }}>
-                  - 'enter' para trocar para Sinos Tubulares;
+                  - Qualquer caractere de <b>'O,o,U,u,I,i'</b> para trocar para
+                  Harpsichord;
                 </p>
                 <p style={{ paddingLeft: 20 }}>
-                  - ',' para trocar para Orgão de Igreja;
+                  - <b>'enter (nova linha)'</b> para trocar para Sinos
+                  Tubulares;
                 </p>
                 <p style={{ paddingLeft: 20 }}>
-                  - Qualquer número para trocar para outro instrumento
-                  aleatório;
+                  - <b>','</b> para trocar para Orgão de Igreja;
+                </p>
+                <p style={{ paddingLeft: 20 }}>
+                  - <b>';'</b> para trocar para Flauta de pã;
+                </p>
+                <p style={{ paddingLeft: 20 }}>
+                  - Um numero de 0 à 9 para trocar para o instrumento referente
+                  ao numéro do instrumento atual somado com o numero digitado;
                 </p>
 
                 <strong style={{ marginTop: 35 }}>
                   - Para dobrar o volume de reprodução, digite:
                 </strong>
                 <p style={{ paddingLeft: 20 }}>
-                  - O caractere 'espaço' (caso não seja possível aumentar, o
-                  volume irá voltar ao normal).
+                  - O caractere '<b>espaço</b>' (caso não seja possível
+                  aumentar, o volume irá voltar ao normal).
                 </p>
 
                 <strong style={{ marginTop: 35 }}>
                   - Para aumentar uma oitava da nota, digite:
                 </strong>
-                <p style={{ paddingLeft: 20 }}>- O caractere '?'</p>
+                <p style={{ paddingLeft: 20 }}>
+                  - O caractere <b>'?'</b> ou o caractere <b>.</b> (ponto)
+                </p>
 
                 <strong style={{ marginTop: 35 }}>
-                  - Para repetir a nota anterior digite (caso o caractere
-                  anterior não seja uma nota, será feita uma pausa ou silêncio):
+                  - Para repetir a nota anterior digite qualquer uma das
+                  alternativas a seguir (caso o caractere anterior não seja uma
+                  nota, será feita uma pausa ou silêncio):
                 </strong>
                 <p style={{ paddingLeft: 20 }}>
-                  {" "}
-                  - As letras: a,b,c,d,e,f ou g
+                  - <b>As letras: a,b,c,d,e,f ou g</b>
                 </p>
                 <p style={{ paddingLeft: 20 }}>
                   {" "}

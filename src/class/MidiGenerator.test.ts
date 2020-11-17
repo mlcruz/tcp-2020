@@ -109,9 +109,9 @@ it("midi generator parse A!B9C9D9 - testa overflow possivel de instrumento", () 
   expect(+eventData[8].pitch[1]).toEqual(1);
   expect(eventData[8].velocity).toEqual(25);
 
-  // Soma nove em seashore (4 - indexado por 0)
-  // Espera instrumento 4 (elec piano 1)
-  expect(eventData[9].data[2]).toEqual(MidiInstrument["elec.piano-1"]);
+  // Soma nove em seashore (122 + 9) = 131 (
+  // Espera instrumento instrument 3: honky-tonk-piano - lembrando que instrumentos são indexados por 0
+  expect(eventData[9].data[2]).toEqual(MidiInstrument["honky-tonk-piano"]);
 
   // D
   expect(eventData[10].type.includes("note")).toBeTruthy();
@@ -123,9 +123,9 @@ it("midi generator parse A!B9C9D9 - testa overflow possivel de instrumento", () 
   expect(+eventData[11].pitch[1]).toEqual(1);
   expect(eventData[11].velocity).toEqual(25);
 
-  // Soma nove em elec piano 1 (4 - indexado por 0)
-  // Espera instrumento 13 (xylophone)
-  expect(eventData[12].data[2]).toEqual(MidiInstrument.xylophone);
+  // Soma nove em honky-tonk-piano
+  // Espera instrumento 12 (marimba)
+  expect(eventData[12].data[2]).toEqual(MidiInstrument.marimba);
 });
 
 it("midi generator parse A!BUC\\nNLD - testa trocas de instrumento", () => {

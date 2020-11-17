@@ -53,7 +53,7 @@ export class MidiGenerator {
         case "ADD_TO_INSTRUMENT_NUMBER": {
           const newInstrument = this.instrument + event.value;
           this.instrument =
-            newInstrument > 127 ? newInstrument - 127 : newInstrument;
+            newInstrument > 127 ? newInstrument - 127 - 1 : newInstrument;
 
           track.addEvent(
             new MidiWriter.ProgramChangeEvent({
