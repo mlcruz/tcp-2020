@@ -1,0 +1,350 @@
+\documentclass[12pt]{article}
+\usepackage{enumerate}
+\usepackage{fullpage}
+\usepackage[brazilian]{babel}
+\usepackage[num]{abntex2cite}
+\usepackage[margin=1in,footskip=0.25in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{minted}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+\title{Requisitos da Fase 3 do Trabalho Prático}
+\author{Matheus Cruz, Martim Kowalczuk Presser}
+\date{Turma B}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\newpage
+
+
+% Início da seção de requisitos
+
+\section{Lista de Requisitos:}
+
+% FASE 1
+\subsection{Requisitos Fase 1:}
+
+\subsubsection{Requisitos funcionais:}
+
+\begin{enumerate}
+    \item Gerar som a partir da entrada de texto do usuário;
+    \begin{enumerate}
+        \item[1.1] A entrada de texto deve ser mapeada para uma sequência de notas a serem tocadas e comandos de alteração das mesmas;
+        \item[1.2] O som gerado pelo usuário é a sequencia de notas tocada por algum instrumento, em algum volume, oitava e frequência;
+        \item[1.3] Os comandos da entrada de texto devem permitir modificar o instrumento (timbre), frequência, volume e oitavas das notas a serem tocadas;
+        \item[1.4] O timbre das notas a serem tocadas representam instrumentos diferentes;
+        \item[1.5]  A oitava (pitch) das notas é alterado a partir de comandos na entrada;
+    \end{enumerate}
+    
+    \item O software necessita ter um interface gráfica para se comunicar com o usuário;
+    \begin{enumerate}
+        \item[2.1] Deve conter instruções claras da utilização do software na tela inicial;
+        \item[2.2] Deve existir um campo em que o usuário possa digitar sua entrada de texto;
+        \item [2.3] Deve existir um botão que o usuário aperte e possa escolher um arquivo de texto para inserir;
+        \item[2.4] Deve existir um botão que o usuário aperte e toque o som correspondente ao texto inserido;
+        \item[2.5] Se o som estiver tocando e for apertado o botão de tocar, o som é pausado;
+        \item[2.6] Se o som estiver pausado, e o botão de tocar for pressionado novamente, o som continua de onde parou;
+    \end{enumerate}
+
+    \item O usuário deve ser capaz entender o funcionamento do programa a partir das informações da tela;
+\end{enumerate}
+
+\subsubsection{Requisitos Não-Funcionais:}
+    \begin{enumerate}
+        \item O software deve ser implementado como aplicativo web;
+        \begin{enumerate}
+            \item[1.1] Necessita de conexão com a internet e um navegador moderno para que o software funcione;
+        \end{enumerate}
+    \end{enumerate}
+
+% FASE 3
+\newpage
+
+\subsection{Requisitos Fase 3:}
+\subsubsection{Requisitos Funcionais:}
+
+\begin{enumerate}
+    \item Gerar som a partir da entrada de texto e/ou inserção de arquivo feita pelo usuário;
+    \begin{enumerate}
+        \item[1.1] A entrada de texto e/ou arquivo deve ser mapeada para uma sequência de notas a serem tocadas e comandos de alteração das mesmas;
+        \item[1.2] O som gerado pelo usuário é a sequencia de notas tocada por algum instrumento, em algum volume e oitava;
+        \item[1.3] Os comandos da entrada de texto e/ou arquivo devem permitir modificar o instrumento (timbre), volume e oitavas das notas a serem tocadas;
+        \item[1.4] O timbre das notas a serem tocadas representam instrumentos diferentes;
+        \item[1.5] As oitava das notas é alterado a partir de comandos na entrada;
+    \end{enumerate}
+    
+    \item Ter a possibilidade de salvar um arquivo tipo MIDI referente ao som gerado a partir do texto;
+    
+    \item O software necessita ter um interface gráfica para se comunicar com o usuário;
+    \begin{enumerate}
+        \item[2.1] Deve conter instruções claras da utilização do software na tela inicial;
+        \item[2.2] Deve existir um campo em que o usuário possa digitar sua entrada de texto;
+        \item [2.3] Deve existir um botão que o usuário aperte e possa escolher um arquivo de texto para inserir;
+        \item[2.4] Deve existir um botão que o usuário aperte e toque o som correspondente ao texto e/ou arquivo inserido;
+    \end{enumerate}
+
+    \item O usuario deve ser capaz enteder o funcionamento do programa a partir das informações da tela;
+\end{enumerate}
+    
+\subsubsection{Requisitos Não-Funcionais:}
+    \begin{enumerate}
+        \item Os usuários devem entender o funcionamento do aplicativo assim que lerem as instruções;
+        \item O software deve ser implementado como aplicativo web;
+        \begin{enumerate}
+            \item[1.1] Necessita de conexão com a internet e um navegador moderno para que o software funcione;
+        \end{enumerate}
+    \end{enumerate}
+
+% Término da seção de requisitos
+
+
+\newpage
+
+
+% Início da seção de código
+
+\section{Definição de Classes:}
+
+O software foi desenvolvido na linguagem Typescript, com o framework React
+utilizando Html e Css para construção da interface. Typescript é uma linguagem que é "transpilada" para javascript, e é praticamente uma versão com tipos algébricos e null do javascript. 
+
+O framework React foi escolhido para gerenciar a lógica de desenho e atualização dos componentes (um componente é algo representável como um elemento html) na tela. De maneira simplificada, o framework funciona fornecendo uma uma classe base React.Componente, que é superclasse de todas as classes que são componentes. Os subcomponentes sobrescrevem o método render() de React.Component, e então podem ser utilizados de maneira similar a qualquer outro elemento html, recebendo parâmetros como atributos de elementos html. 
+
+Por exemplo, nosso componente SoundGeneratorButton (definido abaixo) pode ser utilizado dentro de outros elementos html da seguinte maneira:
+
+\begin{minted}{html}
+<div>
+    <p>Esse é um componente html normal</p>
+    <SoundGeneratorButton input="ABCDEFG"></SoundGeneratorButton>
+</div>
+
+\end{minted}
+
+\subsection{Classes e Métodos:}
+\subsubsection{App.tsx}
+
+Aqui declaramos o componente principal do aplicativo, e no contexto do projeto pode ser considerado fortemente equivalente ao método main() de outras linguagens de programação. 
+
+
+\begin{minted}{typescript}
+
+class App extends React.Component{
+    // A sintaxe de declarão de variaveis em typescript é 'variavel : TIPO'
+
+    // Representa a caixa de entrada de texto do usuário
+    private string userTextInput;
+    
+    // Representa o componente principal que contem a lógica de transformar
+    // a entrada em áudio midi
+    private SoundGeneratorButton soundGeneratorButton;
+    
+    // Sobreescrito de React.Componente, define o html emitido pelo
+    // componente na tela e desenha o soundGeneratorButton
+    public void render()
+    
+    // Construtor da classe. Só chama o construtor do pai herdado
+    public constructor() : App
+
+}
+
+\end{minted}
+
+
+\subsubsection{SoundGeneratorButton.tsx}
+\begin{minted}{typescript}
+class SoundGeneratorButton extends React.Component{
+  // Representa a entrada do usuário
+  private input : string
+  
+  // Tem a responsabilidade de transformar a entrada do usuário de texto para alguma 
+  // representação intermediaria 
+  private inputParser: MusicInputParser
+  
+  // Tem a responsabilidade de transformar a representação intermediaria em um 
+  // arquivo em memoria e de serializar a mesma.
+  // Não é relacionada com tocar o arquivo Midi
+  private midiGenerator: MidiGenerator
+  
+  // Classe que tem a responsabilidade de tocar um arquivo midi
+  // representado como bytes em memoria. Vem da biblioteca MIDIJS
+  private const MIDIjs : MidiJs
+
+  // Emite o código html que representa o componente. 
+  public void render()
+  
+  // Os métodos abaixo gerenciam os eventos que
+  // são chamados ao pressionar cada um dos botões da interface
+  private void onPlaybuttonClick()
+  private void onDownloadButtonClick()
+  private void onUploadButtonClick()
+  
+  public constructor() : SoundGeneratorButton
+
+
+}
+
+\end{minted}
+
+\subsubsection{MidiInstrument.ts}
+
+MidiInstrument é um arquivo que define o tipo de diversos objetos utilizados no programa. A ideia é tentar modelar nosso problema em código utilizando tipos. Não é exatamente uma classe, mas como serve como definição para as classe seguintes, é importante que esteja documentada aqui.
+
+\begin{minted}{typescript}
+
+  // Representa os possíveis instrumentos e seus códigos
+  enum MidiInstrument {
+    "acoustic-piano" = 0,
+    "brtacou-piano" = 1,
+    "elecgrand-piano" = 2,
+    "honky-tonk-piano" = 3,
+    "elec.piano-1" = 4,
+    "elec.piano-2" = 5,
+    ......
+    "telephone" = 124,
+    "helicopter" = 125,
+    "applause" = 126,
+    "gunshot" = 127,
+  }
+
+  // O caractere '|' representa um tipo de "Soma"
+  // Algo do tipo A | B é ou do tipo A, ou do tipo B.
+  type Octave = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+  type Pitch = "A" | "B" | "C" | "D" | "E" | "F" | "G";
+
+  // Representa uma nota a ser tocada
+  type MidiNote = {
+    type: "NOTE";
+    pitch: Pitch;
+  };
+
+  // Representa um possível comando que não é uma nota
+  type Command =
+    | { type: "REPEAT_LAST_OR_SILENCE" }
+    | { type: "DOUBLE_VOLUME" }
+    | { type: "INCREASE_OCTAVE" }
+    | { type: "CHANGE_INSTRUMENT"; value: MidiInstrument }
+    | { type: "ADD_TO_INSTRUMENT_NUMBER"; value: number };
+
+  // Representa uma entrada do usuário já parseada
+  // representada como uma união de MidiNote e Command
+  // Utilizamos esse tipo para representar nossa representação
+  // intermediaria de um "Evento" no midi.
+  type SoundEvent = MidiNote | Command;
+
+\end{minted}
+
+\subsubsection{MusicInputParser.ts}
+
+\begin{minted}{typescript}
+  class MusicInputParser{
+
+  // Transforma a entrada do usuário em uma lista de 
+  // soundEvents. Cada caractere da entrada do usuario é mapeado
+  // para um soundEvent
+  public parseInput(input: string): SoundEvent[]
+
+  // Transforma um caractere para seu mapeamento em Command.
+  private parseCommand(char: string): Command
+
+  // Transforma um caractere para seu mapeamento em Nota.
+  private parseNote(char: string): Note
+
+  public constructor(): MusicInputParser
+}
+\end{minted}
+
+\subsubsection{MidiGenerator.ts}
+\begin{minted}{typescript}
+class MidiGenerator{
+  private instrument: MidiInstrument;
+  private octave: Octave;
+  private lastEvent: SoundEvent | null;
+  private volume: number;
+  
+  // Gera um arquivo Midi pronto para ser serializado 
+  // em formato binario. A classe MidiWriter.Track Vem da biblioteca MidiWriterJs
+  public MidiWriter.Track generateMidiFromSoundEvents();
+  
+  public constructor() : MidiGenerator
+}
+\end{minted}
+
+
+\subsection{Funcionamento do software}
+\begin{enumerate}
+\item {Usuário digita o texto no campo de entrada, ou faz upload de algum um arquivo}
+\item {Ao clicar em tocar, o botão chama o método onPlaybuttonClick que:}
+\subitem {2.1 - Chama o método inputParser.parseInput(input) com a entrada do usuário como parâmetro}
+\subitem {2.2 - Utiliza o resultado da chamada anterior como parâmetro do método midiGenerator.generateMidiFromSoundEvents}
+\subitem {2.3 - Utiliza o resultado da chamada anterior como parâmetro do método MIDIJS.play}
+\subitem {2.4 - MIDI.play toca o arquivo midi para o usuário}
+\end{enumerate}
+
+
+\newpage
+\section{Interface Gráfica (GUI):}
+
+\subsection{Justificativa de Layout da Fase 3:}
+
+\paragraph{}O tipo de layout final foi escolhido com o intuito de ter uma interface utilizando componentes padrões para web, partindo da premissa de que os usuários acessam vários sites diferentes e têm contato com interfaces que seguem o mesmo padrão em alguns deles. A ideia é que o usuário consiga entender o funcionamento do website partindo das instruções na tela e de seu entendimento sobre o funcionamento de outros websites que já tenha visitado.
+
+\paragraph{} Para definir o estilo de nossos componentes, Utilizamos a biblioteca de estilos Bootstrap.css em nosso sistema para tentar manter esse padrão. Ela é de fácil entendimento, por ser simples e separar bem os elementos de maneira intuitiva.
+
+\vspace{0.3cm}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics{interface-tcp-2020.png}
+    \caption{Interface Gráfica do Software da Fase 1}
+    \label{fig:interfacef1}
+\end{figure}
+
+\newpage
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.55]{interface-fase-3.png}
+    \caption{Interface Gráfica do Software da Fase 3}
+    \label{fig:interfacef3}
+\end{figure}
+
+\newpage
+
+\section{Descrição dos Procedimentos de Testes:}
+
+\paragraph{}Foram usados testes automatizados em javascript usando o framework Jest, e os arquivos referentes se encontram neste mesmo zip. Os testes são referentes às entradas de texto e as mudanças de eventos descritas no mapeamento. Por exemplo, aumentar a oitava de uma nota quando há o caractere '?' está presente no texto, dobrar o valor do volume de áudio ao acharmos o caractere ' ' no meio do texto etc.
+
+\paragraph{}Testamos separadamente a lógica referente a transformação da entrada para uma lista de SoundEvents (representação intermediaria) e a lógica referente a escrita dos sounds events no arquivo Midi.
+
+\vspace{0.3cm}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.7]{testcases.png}
+    \caption{Tela de Execução dos Casos de Teste}
+    \label{fig:interfacef3}
+\end{figure}
+
+\newpage
+
+\bibliography{bib.bib}
+
+\begin{itemize}
+\item {midi-writer-js: \url{https://github.com/grimmdude/MidiWriterJS}}
+\item {ReactJs: \url{https://pt-br.reactjs.org}}
+\item MidiJs \url{https://www.midijs.net/}
+\item Jest \url{https://jestjs.io/}
+\item Bootstrap \url{https://getbootstrap.com/docs/4.5/getting-started/introduction/}
+
+\end{itemize}
+
+\end{document}

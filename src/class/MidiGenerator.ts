@@ -80,7 +80,6 @@ export class MidiGenerator {
               velocity: this.volume,
             });
 
-            console.log("note");
             track.addEvent(note);
           } else {
             // Nota sem volume
@@ -105,5 +104,12 @@ export class MidiGenerator {
     const data = new MidiWriter.Writer(track);
 
     return data;
+  }
+
+  public resetState() {
+    this.instrument = 1;
+    this.octave = 1;
+    this.lastEvent = null;
+    this.volume = 25;
   }
 }
