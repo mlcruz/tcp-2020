@@ -40,17 +40,26 @@ export class MidiGenerator {
           break;
         }
         case "CHANGE_INSTRUMENT": {
+          this.instrument = event.value;
+
           track.addEvent(
             new MidiWriter.ProgramChangeEvent({
               instrument: event.value,
             })
           );
+
           break;
         }
         case "ADD_TO_INSTRUMENT_NUMBER": {
           const newInstrument = this.instrument + event.value;
           this.instrument =
-            newInstrument > 127 ? newInstrument % 127 : newInstrument;
+            newInstrument > 127 ? newInstrument - 127 : newInstrument;
+
+          track.addEvent(
+            new MidiWriter.ProgramChangeEvent({
+              instrument: this.instrument,
+            })
+          );
           break;
         }
         case "INCREASE_OCTAVE": {
