@@ -15,7 +15,7 @@ type MidiNoteEvent = {
   data: number[];
 };
 
-it("midi generator parsea ABCDEFG", () => {
+it("midi generator parse ABCDEFG", () => {
   const inputString = "ABCDEFG";
   const inputParser = new MusicInputParser();
   const midiGenerator = new MidiGenerator();
@@ -55,7 +55,7 @@ it("midi generator parsea ABCDEFG", () => {
   }
 });
 
-it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", () => {
+it("midi generator parse A!B9C9D9 - testa overflow possivel de instrumento", () => {
   const inputParser = new MusicInputParser();
   const midiGenerator = new MidiGenerator();
 
@@ -128,7 +128,7 @@ it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", ()
   expect(eventData[12].data[2]).toEqual(MidiInstrument.xylophone);
 });
 
-it("midi generator parsea A!BUC\\nNLD - testa trocas de instrumento", () => {
+it("midi generator parse A!BUC\\nNLD - testa trocas de instrumento", () => {
   const inputParser = new MusicInputParser();
   const midiGenerator = new MidiGenerator();
 
@@ -380,7 +380,7 @@ it("midi generator parse Aa.pC - testa silencio ou repete ultima nota", () => {
   expect(eventData[8].velocity).toEqual(25);
 });
 
-it("midi generator parsea A!p. Bbc. C3,D - teste de sequencia com varios tipos de entrada", () => {
+it("midi generator parse A!p. Bbc. C3,D - teste de sequencia com varios tipos de entrada", () => {
   const inputParser = new MusicInputParser();
   const midiGenerator = new MidiGenerator();
 
