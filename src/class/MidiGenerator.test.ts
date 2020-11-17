@@ -128,11 +128,11 @@ it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", ()
   expect(eventData[12].data[2]).toEqual(MidiInstrument.xylophone);
 });
 
-it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", () => {
+it("midi generator parsea A!BUC\\nNLD - testa trocas de instrumento", () => {
   const inputParser = new MusicInputParser();
   const midiGenerator = new MidiGenerator();
 
-  const parsedInput = inputParser.parseInput("A!B9C9D9");
+  const parsedInput = inputParser.parseInput("A!BUC\nD;E,");
 
   const generatedMidi = midiGenerator.generateMidiFromSoundEvents(parsedInput);
 
@@ -168,9 +168,7 @@ it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", ()
   expect(+eventData[5].pitch[1]).toEqual(1);
   expect(eventData[5].velocity).toEqual(25);
 
-  // Soma nove em agogo (113 - indexado por 0)
-  // Espera instrumento 122 (seashore)
-  expect(eventData[6].data[2]).toEqual(MidiInstrument.seashore);
+  expect(eventData[6].data[2]).toEqual(MidiInstrument.harsichord);
 
   // C
   expect(eventData[7].type.includes("note")).toBeTruthy();
@@ -182,9 +180,8 @@ it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", ()
   expect(+eventData[8].pitch[1]).toEqual(1);
   expect(eventData[8].velocity).toEqual(25);
 
-  // Soma nove em seashore (4 - indexado por 0)
-  // Espera instrumento 4 (elec piano 1)
-  expect(eventData[9].data[2]).toEqual(MidiInstrument["elec.piano-1"]);
+  // \n
+  expect(eventData[9].data[2]).toEqual(MidiInstrument["tubular-bells"]);
 
   // D
   expect(eventData[10].type.includes("note")).toBeTruthy();
@@ -196,12 +193,24 @@ it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", ()
   expect(+eventData[11].pitch[1]).toEqual(1);
   expect(eventData[11].velocity).toEqual(25);
 
-  // Soma nove em elec piano 1 (4 - indexado por 0)
-  // Espera instrumento 13 (xylophone)
-  expect(eventData[12].data[2]).toEqual(MidiInstrument.xylophone);
+  // ;
+  expect(eventData[12].data[2]).toEqual(MidiInstrument["pan-flute"]);
+
+  // E
+  expect(eventData[13].type.includes("note")).toBeTruthy();
+  expect(eventData[13].pitch[0]).toEqual("E");
+  expect(+eventData[13].pitch[1]).toEqual(1);
+  expect(eventData[13].velocity).toEqual(25);
+  expect(eventData[14].type.includes("note")).toBeTruthy();
+  expect(eventData[14].pitch[0]).toEqual("E");
+  expect(+eventData[14].pitch[1]).toEqual(1);
+  expect(eventData[14].velocity).toEqual(25);
+
+  // ,
+  expect(eventData[15].data[2]).toEqual(MidiInstrument["church-organ"]);
 });
 
-it("midi generator parsea A...B.?.?C?D9 - testa aumentos de oitava", () => {
+it("midi generator parse A...B.?.?C?D9 - testa aumentos de oitava", () => {
   const inputParser = new MusicInputParser();
   const midiGenerator = new MidiGenerator();
 
@@ -258,7 +267,7 @@ it("midi generator parsea A...B.?.?C?D9 - testa aumentos de oitava", () => {
   expect(eventData[8].velocity).toEqual(25);
 });
 
-it("midi generator parsea A B C D - testa volume", () => {
+it("midi generator parse A B C D - testa volume", () => {
   const inputParser = new MusicInputParser();
   const midiGenerator = new MidiGenerator();
 
