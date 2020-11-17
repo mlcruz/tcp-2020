@@ -34,7 +34,7 @@ export class MusicInputParser {
     if (char.match(/[1234567890]/))
       return { type: "ADD_TO_INSTRUMENT_NUMBER", value: +char };
 
-    if (char === "?") return { type: "INCREASE_OCTAVE" };
+    if (char === "?" || char === ".") return { type: "INCREASE_OCTAVE" };
     if (char === "\n")
       return {
         type: "CHANGE_INSTRUMENT",

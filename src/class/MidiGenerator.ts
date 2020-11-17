@@ -13,7 +13,7 @@ export class MidiGenerator {
     this.instrument = 1;
     this.octave = 1;
     this.lastEvent = null;
-    this.volume = 50;
+    this.volume = 30;
   }
 
   public generateMidiFromSoundEvents(parsedInputList: SoundEvent[]) {
@@ -64,7 +64,7 @@ export class MidiGenerator {
         }
         case "INCREASE_OCTAVE": {
           this.octave =
-            this.octave >= 8 ? (0 as Octave) : ((this.octave + 1) as Octave);
+            this.octave >= 8 ? (1 as Octave) : ((this.octave + 1) as Octave);
           break;
         }
         case "REPEAT_LAST_OR_SILENCE": {

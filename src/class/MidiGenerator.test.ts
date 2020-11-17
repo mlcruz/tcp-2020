@@ -51,7 +51,7 @@ it("midi generator parsea ABCDEFG", () => {
     expect(+event.pitch[1]).toEqual(1);
 
     // Volume esperado
-    expect(event.velocity).toEqual(50);
+    expect(event.velocity).toEqual(30);
   }
 });
 
@@ -75,11 +75,11 @@ it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", ()
   expect(eventData[1].type.includes("note")).toBeTruthy();
   expect(eventData[1].pitch[0]).toEqual("A");
   expect(+eventData[1].pitch[1]).toEqual(1);
-  expect(eventData[1].velocity).toEqual(50);
+  expect(eventData[1].velocity).toEqual(30);
   expect(eventData[2].type.includes("note")).toBeTruthy();
   expect(eventData[2].pitch[0]).toEqual("A");
   expect(+eventData[2].pitch[1]).toEqual(1);
-  expect(eventData[2].velocity).toEqual(50);
+  expect(eventData[2].velocity).toEqual(30);
 
   // ?
   // eventData[i].data[2] acessa instrumento da troca de instrumento
@@ -89,11 +89,11 @@ it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", ()
   expect(eventData[4].type.includes("note")).toBeTruthy();
   expect(eventData[4].pitch[0]).toEqual("B");
   expect(+eventData[4].pitch[1]).toEqual(1);
-  expect(eventData[4].velocity).toEqual(50);
+  expect(eventData[4].velocity).toEqual(30);
   expect(eventData[5].type.includes("note")).toBeTruthy();
   expect(eventData[5].pitch[0]).toEqual("B");
   expect(+eventData[5].pitch[1]).toEqual(1);
-  expect(eventData[5].velocity).toEqual(50);
+  expect(eventData[5].velocity).toEqual(30);
 
   // Soma nove em agogo (113 - indexado por 0)
   // Espera instrumento 122 (seashore)
@@ -103,27 +103,157 @@ it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", ()
   expect(eventData[7].type.includes("note")).toBeTruthy();
   expect(eventData[7].pitch[0]).toEqual("C");
   expect(+eventData[7].pitch[1]).toEqual(1);
-  expect(eventData[7].velocity).toEqual(50);
+  expect(eventData[7].velocity).toEqual(30);
   expect(eventData[8].type.includes("note")).toBeTruthy();
   expect(eventData[8].pitch[0]).toEqual("C");
   expect(+eventData[8].pitch[1]).toEqual(1);
-  expect(eventData[8].velocity).toEqual(50);
+  expect(eventData[8].velocity).toEqual(30);
 
   // Soma nove em seashore (4 - indexado por 0)
   // Espera instrumento 4 (elec piano 1)
   expect(eventData[9].data[2]).toEqual(MidiInstrument["elec.piano-1"]);
 
-  // C
+  // D
   expect(eventData[10].type.includes("note")).toBeTruthy();
   expect(eventData[10].pitch[0]).toEqual("D");
   expect(+eventData[10].pitch[1]).toEqual(1);
-  expect(eventData[10].velocity).toEqual(50);
+  expect(eventData[10].velocity).toEqual(30);
   expect(eventData[11].type.includes("note")).toBeTruthy();
   expect(eventData[11].pitch[0]).toEqual("D");
   expect(+eventData[11].pitch[1]).toEqual(1);
-  expect(eventData[11].velocity).toEqual(50);
+  expect(eventData[11].velocity).toEqual(30);
 
   // Soma nove em elec piano 1 (4 - indexado por 0)
   // Espera instrumento 13 (xylophone)
   expect(eventData[12].data[2]).toEqual(MidiInstrument.xylophone);
+});
+
+it("midi generator parsea A!B9C9D9 - testa overflow possivel de instrumento", () => {
+  const inputParser = new MusicInputParser();
+  const midiGenerator = new MidiGenerator();
+
+  const parsedInput = inputParser.parseInput("A!B9C9D9");
+
+  const generatedMidi = midiGenerator.generateMidiFromSoundEvents(parsedInput);
+
+  const eventData = generatedMidi.data[1].events;
+
+  // Primeiro comando é troca para instrumento inicial
+  const instrumentChangeEvent = eventData[0];
+
+  // program event type
+  expect(instrumentChangeEvent.type.includes("program")).toBeTruthy();
+
+  // A
+  expect(eventData[1].type.includes("note")).toBeTruthy();
+  expect(eventData[1].pitch[0]).toEqual("A");
+  expect(+eventData[1].pitch[1]).toEqual(1);
+  expect(eventData[1].velocity).toEqual(30);
+  expect(eventData[2].type.includes("note")).toBeTruthy();
+  expect(eventData[2].pitch[0]).toEqual("A");
+  expect(+eventData[2].pitch[1]).toEqual(1);
+  expect(eventData[2].velocity).toEqual(30);
+
+  // ?
+  // eventData[i].data[2] acessa instrumento da troca de instrumento
+  expect(eventData[3].data[2]).toEqual(MidiInstrument.agogo);
+
+  // B
+  expect(eventData[4].type.includes("note")).toBeTruthy();
+  expect(eventData[4].pitch[0]).toEqual("B");
+  expect(+eventData[4].pitch[1]).toEqual(1);
+  expect(eventData[4].velocity).toEqual(30);
+  expect(eventData[5].type.includes("note")).toBeTruthy();
+  expect(eventData[5].pitch[0]).toEqual("B");
+  expect(+eventData[5].pitch[1]).toEqual(1);
+  expect(eventData[5].velocity).toEqual(30);
+
+  // Soma nove em agogo (113 - indexado por 0)
+  // Espera instrumento 122 (seashore)
+  expect(eventData[6].data[2]).toEqual(MidiInstrument.seashore);
+
+  // C
+  expect(eventData[7].type.includes("note")).toBeTruthy();
+  expect(eventData[7].pitch[0]).toEqual("C");
+  expect(+eventData[7].pitch[1]).toEqual(1);
+  expect(eventData[7].velocity).toEqual(30);
+  expect(eventData[8].type.includes("note")).toBeTruthy();
+  expect(eventData[8].pitch[0]).toEqual("C");
+  expect(+eventData[8].pitch[1]).toEqual(1);
+  expect(eventData[8].velocity).toEqual(30);
+
+  // Soma nove em seashore (4 - indexado por 0)
+  // Espera instrumento 4 (elec piano 1)
+  expect(eventData[9].data[2]).toEqual(MidiInstrument["elec.piano-1"]);
+
+  // D
+  expect(eventData[10].type.includes("note")).toBeTruthy();
+  expect(eventData[10].pitch[0]).toEqual("D");
+  expect(+eventData[10].pitch[1]).toEqual(1);
+  expect(eventData[10].velocity).toEqual(30);
+  expect(eventData[11].type.includes("note")).toBeTruthy();
+  expect(eventData[11].pitch[0]).toEqual("D");
+  expect(+eventData[11].pitch[1]).toEqual(1);
+  expect(eventData[11].velocity).toEqual(30);
+
+  // Soma nove em elec piano 1 (4 - indexado por 0)
+  // Espera instrumento 13 (xylophone)
+  expect(eventData[12].data[2]).toEqual(MidiInstrument.xylophone);
+});
+
+it("midi generator parsea A...B.?.?C?D9 - testa aumentos de oitava", () => {
+  const inputParser = new MusicInputParser();
+  const midiGenerator = new MidiGenerator();
+
+  const parsedInput = inputParser.parseInput("A...B.?.?C?D9");
+
+  const generatedMidi = midiGenerator.generateMidiFromSoundEvents(parsedInput);
+
+  const eventData = generatedMidi.data[1].events;
+
+  // Primeiro comando é troca para instrumento inicial
+  const instrumentChangeEvent = eventData[0];
+
+  // program event type
+  expect(instrumentChangeEvent.type.includes("program")).toBeTruthy();
+
+  // A
+  expect(eventData[1].type.includes("note")).toBeTruthy();
+  expect(eventData[1].pitch[0]).toEqual("A");
+  expect(+eventData[1].pitch[1]).toEqual(1);
+  expect(eventData[1].velocity).toEqual(30);
+  expect(eventData[2].type.includes("note")).toBeTruthy();
+  expect(eventData[2].pitch[0]).toEqual("A");
+  expect(+eventData[2].pitch[1]).toEqual(1);
+  expect(eventData[2].velocity).toEqual(30);
+
+  // B
+  expect(eventData[3].type.includes("note")).toBeTruthy();
+  expect(eventData[3].pitch[0]).toEqual("B");
+  expect(+eventData[3].pitch[1]).toEqual(4);
+  expect(eventData[3].velocity).toEqual(30);
+  expect(eventData[4].type.includes("note")).toBeTruthy();
+  expect(eventData[4].pitch[0]).toEqual("B");
+  expect(+eventData[4].pitch[1]).toEqual(4);
+  expect(eventData[4].velocity).toEqual(30);
+
+  // C
+  expect(eventData[5].type.includes("note")).toBeTruthy();
+  expect(eventData[5].pitch[0]).toEqual("C");
+  expect(+eventData[5].pitch[1]).toEqual(8);
+  expect(eventData[5].velocity).toEqual(30);
+  expect(eventData[6].type.includes("note")).toBeTruthy();
+  expect(eventData[6].pitch[0]).toEqual("C");
+  expect(+eventData[6].pitch[1]).toEqual(8);
+  expect(eventData[6].velocity).toEqual(30);
+
+  // D
+  expect(eventData[7].type.includes("note")).toBeTruthy();
+  expect(eventData[7].pitch[0]).toEqual("D");
+  expect(+eventData[7].pitch[1]).toEqual(1);
+  expect(eventData[7].velocity).toEqual(30);
+  expect(eventData[8].type.includes("note")).toBeTruthy();
+  expect(eventData[8].pitch[0]).toEqual("D");
+  expect(+eventData[8].pitch[1]).toEqual(1);
+  expect(eventData[8].velocity).toEqual(30);
 });
