@@ -13,7 +13,7 @@ export class MidiGenerator {
     this.instrument = 1;
     this.octave = 1;
     this.lastEvent = null;
-    this.volume = 30;
+    this.volume = 25;
   }
 
   public generateMidiFromSoundEvents(parsedInputList: SoundEvent[]) {
@@ -97,7 +97,7 @@ export class MidiGenerator {
         }
         case "DOUBLE_VOLUME":
           const newVolume = this.volume * 2;
-          this.volume = newVolume > 100 ? 20 : newVolume;
+          this.volume = newVolume > 100 ? 25 : newVolume;
           break;
       }
       this.lastEvent = event;
