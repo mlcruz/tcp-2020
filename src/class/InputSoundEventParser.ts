@@ -43,6 +43,7 @@ export class InputSoundEventParser {
       return { type: "ADD_TO_INSTRUMENT_NUMBER", value: +char };
 
     if (char === "?" || char === ".") return { type: "INCREASE_OCTAVE" };
+
     if (char === "\n")
       return {
         type: "CHANGE_INSTRUMENT",
