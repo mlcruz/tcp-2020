@@ -1,4 +1,5 @@
 // Ver https://msu.edu/course/mus/441/snapshot.afs/sullivan/fs2/MidiFiles/GenMidiInstList.html
+// Enumeração (iniciando em 0) dos intrumentos Midi possiveis
 export enum MidiInstrument {
   "acoustic-piano" = 0,
   "brtacou-piano" = 1,
@@ -145,4 +146,5 @@ export type Command =
   | { type: "CHANGE_INSTRUMENT"; value: MidiInstrument }
   | { type: "ADD_TO_INSTRUMENT_NUMBER"; value: number };
 
+// Um SoundEvent é uma nota a ser tocada ou um comando
 export type SoundEvent = MidiNote | Command;

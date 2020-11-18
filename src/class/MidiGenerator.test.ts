@@ -1,5 +1,5 @@
 import { MidiGenerator } from "./MidiGenerator";
-import { MusicInputParser } from "./MusicInputParser";
+import { InputSoundEventParser } from "./InputSoundEventParser";
 import { MidiInstrument } from "./MidiInstrument";
 
 type MidiNoteEvent = {
@@ -17,7 +17,7 @@ type MidiNoteEvent = {
 
 it("midi generator parse ABCDEFG", () => {
   const inputString = "ABCDEFG";
-  const inputParser = new MusicInputParser();
+  const inputParser = new InputSoundEventParser();
   const midiGenerator = new MidiGenerator();
 
   const parsedInput = inputParser.parseInput("ABCDEFG");
@@ -56,7 +56,7 @@ it("midi generator parse ABCDEFG", () => {
 });
 
 it("midi generator parse A!B9C9D9 - testa overflow possivel de instrumento", () => {
-  const inputParser = new MusicInputParser();
+  const inputParser = new InputSoundEventParser();
   const midiGenerator = new MidiGenerator();
 
   const parsedInput = inputParser.parseInput("A!B9C9D9");
@@ -129,7 +129,7 @@ it("midi generator parse A!B9C9D9 - testa overflow possivel de instrumento", () 
 });
 
 it("midi generator parse A!BUC\\nNLD - testa trocas de instrumento", () => {
-  const inputParser = new MusicInputParser();
+  const inputParser = new InputSoundEventParser();
   const midiGenerator = new MidiGenerator();
 
   const parsedInput = inputParser.parseInput("A!BUC\nD;E,");
@@ -212,7 +212,7 @@ it("midi generator parse A!BUC\\nNLD - testa trocas de instrumento", () => {
 });
 
 it("midi generator parse A...B.?.?C?D9 - testa aumentos de oitava", () => {
-  const inputParser = new MusicInputParser();
+  const inputParser = new InputSoundEventParser();
   const midiGenerator = new MidiGenerator();
 
   const parsedInput = inputParser.parseInput("A...B.?.?C?D9");
@@ -269,7 +269,7 @@ it("midi generator parse A...B.?.?C?D9 - testa aumentos de oitava", () => {
 });
 
 it("midi generator parse A B C D - testa volume", () => {
-  const inputParser = new MusicInputParser();
+  const inputParser = new InputSoundEventParser();
   const midiGenerator = new MidiGenerator();
 
   const parsedInput = inputParser.parseInput("A B C D");
@@ -326,7 +326,7 @@ it("midi generator parse A B C D - testa volume", () => {
 });
 
 it("midi generator parse Aa.pC - testa silencio ou repete ultima nota", () => {
-  const inputParser = new MusicInputParser();
+  const inputParser = new InputSoundEventParser();
   const midiGenerator = new MidiGenerator();
 
   const parsedInput = inputParser.parseInput("Aa.pC");
@@ -381,7 +381,7 @@ it("midi generator parse Aa.pC - testa silencio ou repete ultima nota", () => {
 });
 
 it("midi generator parse A!p. Bbc. C3,D - teste de sequencia com varios tipos de entrada", () => {
-  const inputParser = new MusicInputParser();
+  const inputParser = new InputSoundEventParser();
   const midiGenerator = new MidiGenerator();
 
   const parsedInput = inputParser.parseInput("A!p. Bbc. C3,D");

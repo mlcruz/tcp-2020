@@ -1,6 +1,6 @@
 import { MidiInstrument, SoundEvent, Pitch, Command } from "./MidiInstrument";
 
-export class MusicInputParser {
+export class InputSoundEventParser {
   public parseInput(input: string): SoundEvent[] {
     var result: SoundEvent[] = [];
 
