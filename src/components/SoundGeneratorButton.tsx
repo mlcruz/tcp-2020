@@ -22,7 +22,7 @@ export default class SoundGeneratorButton extends React.Component<Props> {
 
   // Music input parser é responsavel por transformar a entrada de usuario de string
   // para uma representação intermediaria de array de SoundEvents (ver MidiInstrument.ts)
-  private musicInputParser: InputSoundEventParser;
+  private inputSoundEventParser: InputSoundEventParser;
 
   // Precisamos de uma referencia ao elemento de link de download para
   // atribuir o link de download para seu atributo href quando o elemento clicado
@@ -32,7 +32,7 @@ export default class SoundGeneratorButton extends React.Component<Props> {
     super(props);
 
     this.midiGenerator = new MidiGenerator();
-    this.musicInputParser = new InputSoundEventParser();
+    this.inputSoundEventParser = new InputSoundEventParser();
 
     this.downloadFileRef = React.createRef();
 
@@ -45,7 +45,7 @@ export default class SoundGeneratorButton extends React.Component<Props> {
 
   // Geramos um link contendo os dados para download do arquivo Midi
   private generateMidiDataUri(): string {
-    const soundEvents = this.musicInputParser.parseInput(this.props.input);
+    const soundEvents = this.inputSoundEventParser.parseInput(this.props.input);
     this.midiGenerator.resetState();
     const midi = this.midiGenerator.generateMidiFromSoundEvents(soundEvents);
     const midiData = `data:audio/midi;base64,${base64.bytesToBase64(

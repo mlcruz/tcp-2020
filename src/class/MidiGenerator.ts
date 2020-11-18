@@ -4,6 +4,7 @@ import { MidiInstrument, SoundEvent, Octave } from "./MidiInstrument";
 import MidiWriter from "midi-writer-js";
 
 export class MidiGenerator {
+  // Utilizamos nosso estado para ir
   private instrument: MidiInstrument;
   private octave: Octave;
   private lastEvent: SoundEvent | null;
@@ -17,21 +18,30 @@ export class MidiGenerator {
   }
 
   public generateMidiFromSoundEvents(parsedInputList: SoundEvent[]) {
-    var track = new MidiWriter.Track();
+    // Track do midi que será escrita com os dados dos eventos
+    let track = new MidiWriter.Track();
+
+    // Inicializamos o midi com o intrumento inicial. Trocas de instrumento são feita utilizando um ProgramChangeEvent
     track.addEvent(
       new MidiWriter.ProgramChangeEvent({ instrument: this.instrument })
     );
 
+    // 1/2 de 2 segundos (1 segundo por nota)
+    const notePeriod = "2";
+
     for (let i = 0; i < parsedInputList.length; i++) {
-      // 1/4 de 2 segundos
-      const period = "2";
       const event = parsedInputList[i];
 
+      // Esse switch parece feio mas a maneira como o tipo SoundEvent é construido
+      // permite com que o compilador verifique o uso correto dos eventos a partir do tipo
+      // discriminado. Ao cair no case do switch, o tipo soma é "descontruido" em um de seus tipos
       switch (event.type) {
         case "NOTE": {
           let note = new MidiWriter.NoteEvent({
+            // interpolação de strings para montar um 'pitch' com o caractere da nota e o da oitava
+            // EX de string resultante: A1 (event.pitch = A, this.octave = 1)
             pitch: [`${event.pitch}${this.octave.toString().toUpperCase()}`],
-            duration: period,
+            duration: notePeriod,
             // Velocity = volume
             velocity: this.volume,
           });
@@ -39,6 +49,7 @@ export class MidiGenerator {
           track.addEvent(note);
           break;
         }
+        // Troca generica de instrumentos
         case "CHANGE_INSTRUMENT": {
           this.instrument = event.value;
 
@@ -47,11 +58,12 @@ export class MidiGenerator {
               instrument: event.value,
             })
           );
-
           break;
         }
         case "ADD_TO_INSTRUMENT_NUMBER": {
           const newInstrument = this.instrument + event.value;
+          // Esse ternarios podem parecer feios, mas como typescript é baseado em expresões
+          // essa é a maneira 'idiomatica' de fazer essas atribuições simples.
           this.instrument =
             newInstrument > 127 ? newInstrument - 127 - 1 : newInstrument;
 
@@ -75,7 +87,7 @@ export class MidiGenerator {
                   this.lastEvent.pitch
                 }${this.octave.toString().toUpperCase()}`,
               ],
-              duration: period,
+              duration: notePeriod,
               // Velocity = volume
               velocity: this.volume,
             });
@@ -85,7 +97,7 @@ export class MidiGenerator {
             // Nota sem volume
             let note = new MidiWriter.NoteEvent({
               pitch: [" "],
-              duration: period,
+              duration: notePeriod,
               // Velocity = volume
               velocity: 0,
             });

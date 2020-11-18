@@ -1,3 +1,7 @@
+// Uma das grandes vantagens do typescript é que o compilador utiliza os tipos
+// das variaveis do programa para fazer analise estatica. A maneira que o código é escrita
+// visa utilizar essa caracteristica para garantir a validade das expressões encontradas no código.
+
 // Ver https://msu.edu/course/mus/441/snapshot.afs/sullivan/fs2/MidiFiles/GenMidiInstList.html
 // Enumeração (iniciando em 0) dos intrumentos Midi possiveis
 export enum MidiInstrument {
@@ -139,6 +143,7 @@ export type MidiNote = {
   pitch: Pitch;
 };
 
+// Possiveis comandos são representados como um tipo 'soma'
 export type Command =
   | { type: "REPEAT_LAST_OR_SILENCE" }
   | { type: "DOUBLE_VOLUME" }
